@@ -29,7 +29,7 @@ include(FindPkgConfig)
 include_directories(include/public)
 include_directories(include/internal)
 
-install(DIRECTORY "include/public/" DESTINATION @WEBOS_INSTALL_INCLUDEDIR@ FILES_MATCHING PATTERN "*.h" PATTERN ".*" EXCLUDE)
+install(DIRECTORY "include/public/" DESTINATION ${WEBOS_INSTALL_INCLUDEDIR} FILES_MATCHING PATTERN "*.h" PATTERN ".*" EXCLUDE)
 webos_build_pkgconfig(files/pkgconfig/bluetooth-sil-api)
 
 # The following line can be removed once it has been added to cmake-modules-webos:
