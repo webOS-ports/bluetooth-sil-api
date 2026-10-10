@@ -113,7 +113,8 @@ public:
 	void setIvIndex(uint32_t ivIndex) { this->ivIndex = ivIndex; }
 	void setNetKeys(std::vector<BleMeshNetKeys> &netKeys) { this->netKeys = netKeys; }
 	void setAppKeys(std::vector<BleMeshAppKeys> &appKeys) { this->appKeys = appKeys; }
-	void setProvisioners(std::vector<BleMeshProvisioner> &appKeys) { this->provisioners = provisioners; }
+	// Stored nothing: the parameter was named appKeys, and the field was assigned to itself.
+	void setProvisioners(std::vector<BleMeshProvisioner> &provisioners) { this->provisioners = provisioners; }
 private:
 	/** @brief Mesh network name */
 	std::string meshName;
