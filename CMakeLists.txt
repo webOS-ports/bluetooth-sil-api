@@ -22,8 +22,8 @@ include(webOS/webOS)
 webos_modules_init(1 0 0 QUALIFIER RC7)
 webos_component(1 0 0)
 
-# Enable C++11 support (still gcc 4.6 so can't use -std=c++11)
-webos_add_compiler_flags(ALL -std=c++0x)
+# C++23, as com.webos.service.bluetooth2 (it was C++11, from the gcc 4.6 days)
+webos_add_compiler_flags(ALL -std=c++23 -Wall -Wextra)
 
 include(FindPkgConfig)
 include_directories(include/public)
