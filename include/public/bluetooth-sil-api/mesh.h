@@ -616,6 +616,31 @@ public:
 									uint16_t /*nodeAddress*/ = 0,
 									uint16_t /*appKeyIndex*/ = 0) {}
 
+	/**
+	 * @brief This method is called when a createNetwork() that returned
+	 * BLUETOOTH_ERROR_NONE has finished. createNetwork() only starts it; the
+	 * stack may still refuse the network.
+	 *
+	 * On success updateNetworkId() follows with the id of the new network.
+	 *
+	 * @param error BLUETOOTH_ERROR_NONE when the network was created, else why it was not
+	 * @param adapterAddress Adapter Address
+	 */
+	virtual void createNetworkResult(BluetoothError /*error*/, const std::string &/*adapterAddress*/) {}
+
+	/**
+	 * @brief This method is called when attaching the local node to its network
+	 * has finished: after attach(), and after the network that createNetwork()
+	 * made was joined. Until it succeeds, calls that need the local node fail.
+	 *
+	 * @param error BLUETOOTH_ERROR_NONE when the node is attached, else why it is not
+	 *              (for instance no node is known for the token)
+	 * @param adapterAddress Adapter Address
+	 */
+	virtual void attachResult(BluetoothError /*error*/, const std::string &/*adapterAddress*/) {}
+
+	// New events go last: the slots of the ones above stay where SILs and the service built before expect them.
+
 protected:
 	// Not deleted through this interface (that would need a virtual destructor, which changes the layout
 	// SILs and the service share): protected, so that such a delete does not compile.
