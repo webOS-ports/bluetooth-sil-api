@@ -22,6 +22,7 @@
 #endif
 
 #include <stdint.h>
+#include <cctype>
 #include <cstdlib>
 #include <memory.h>
 #include <arpa/inet.h>
@@ -93,35 +94,35 @@ public:
 	 * @param rhs Right-hand side object to compare
 	 * @return Result of the comparison.
 	 */
-	bool operator <(const BluetoothUuid& rhs) const { return uuid < rhs.uuid; }
+	bool operator <(const BluetoothUuid& rhs) const { return lower(uuid) < lower(rhs.uuid); }
 
 	/**
 	 * @brief Operator implementation to support UUID comparison
 	 * @param rhs Right-hand side object to compare
 	 * @return Result of the comparison.
 	 */
-	bool operator ==(const BluetoothUuid& rhs) const { return uuid == rhs.uuid; }
+	bool operator ==(const BluetoothUuid& rhs) const { return lower(uuid) == lower(rhs.uuid); }
 
 	/**
 	 * @brief Operator implementation to support UUID comparison
 	 * @param rhs Right-hand side object to compare
 	 * @return Result of the comparison.
 	 */
-        bool operator !=(const BluetoothUuid& rhs) const { return uuid != rhs.uuid; }
+	bool operator !=(const BluetoothUuid& rhs) const { return !(*this == rhs); }
 
 	/**
 	 * @brief Operator implementation to support UUID comparison
 	 * @param rhs Right-hand side object to compare
 	 * @return Result of the comparison.
 	 */
-	bool operator ==(const std::string& rhs) const { return uuid == rhs; }
+	bool operator ==(const std::string& rhs) const { return lower(uuid) == lower(rhs); }
 
 	/**
 	 * @brief Operator implementation to support UUID comparison
 	 * @param rhs Right-hand side object to compare
 	 * @return Result of the comparison.
 	 */
-	bool operator !=(const std::string& rhs) const { return uuid != rhs; }
+	bool operator !=(const std::string& rhs) const { return !(*this == rhs); }
 
 	/**
 	 * @brief Return UUID as string
@@ -187,9 +188,12 @@ public:
 
 		if (type != UUID128)
 		{
-			// Getting a 32 bit value will always work also when we have only a 16 bit UUID
-			uint32_t u32 = toUInt32();
+			// The 16 or 32 bits in the Bluetooth base UUID 0000xxxx-0000-1000-8000-00805f9b34fb, big-endian like
+			// the 128-bit case below. The host-endian value was copied into the first bytes and the rest left 0.
+			static const uint8_t base[12] = { 0x00, 0x00, 0x10, 0x00, 0x80, 0x00, 0x00, 0x80, 0x5f, 0x9b, 0x34, 0xfb };
+			uint32_t u32 = htonl(toUInt32());
 			memcpy(&ptr[0], &u32, 4);
+			memcpy(&ptr[4], base, sizeof(base));
 		}
 		else
 		{
@@ -232,9 +236,17 @@ public:
 	Type getType() const { return type; }
 
 private:
+	// Compared regardless of case: BlueZ reports lower case, apps may send upper case.
+	static std::string lower(std::string s)
+	{
+		std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return (char)tolower(c); });
+		return s;
+	}
+
 	void determineType()
 	{
-		bool onlyAlNum = std::find_if(uuid.begin(), uuid.end(), [](char c) { return !isalnum(c); }) == uuid.end();
+		// Hex digits, not any letter: "zzzz" was a valid UUID16, and a UUID128 of letters converted to zeros.
+		bool onlyAlNum = std::find_if(uuid.begin(), uuid.end(), [](char c) { return !isxdigit((unsigned char)c); }) == uuid.end();
 
 		if (onlyAlNum)
 		{
@@ -260,8 +272,8 @@ private:
 						if (*iter != '-')
 							return false;
 					}
-					// all other characters are allowed to be alpha-numeric only
-					else if(!isalnum(*iter))
+					// all other characters are allowed to be hex digits only
+					else if(!isxdigit((unsigned char)*iter))
 						return false;
 
 					pos++;
@@ -292,7 +304,10 @@ namespace std
 	{
 		std::size_t operator()(const BluetoothUuid &uuid) const
 		{
-			return hash<string>()(uuid.toString());
+			// Equal UUIDs, which now ignore case, hash equally.
+			std::string s = uuid.toString();
+			std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return (char)tolower(c); });
+			return hash<string>()(s);
 		}
 	};
 }
