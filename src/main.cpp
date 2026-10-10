@@ -55,9 +55,10 @@ std::map<std::string, BluetoothPairingIOCapability> mainPairingIOCapability =
 void identify_used_sil(char *path)
 {
 	std::string str = path;
-	unsigned basename = str.rfind("/");
-	unsigned extension = str.rfind(".so");
-	if (basename && extension)
+	// size_type and npos: in an unsigned, npos was 0xffffffff (always true), and a slash at 0 was taken for none.
+	std::string::size_type basename = str.rfind("/");
+	std::string::size_type extension = str.rfind(".so");
+	if (basename != std::string::npos && extension != std::string::npos && extension > basename)
 	{
 		silName = str.substr(basename+1, extension-basename-1);
 		DEBUG_MSG("silName is: '" << silName << "'");
