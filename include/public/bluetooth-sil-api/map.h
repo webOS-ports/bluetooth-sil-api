@@ -362,6 +362,11 @@ public:
 	 * @param properties List of event properties which have changed.
 	 */
 	virtual void messageNotificationEvent(const std::string &/*adapterAddress*/, const std::string &/*sessionId*/, BluetoothMessageList &/*properties*/) { }
+
+protected:
+	// Not deleted through this interface (that would need a virtual destructor, which changes the layout
+	// SILs and the service share): protected, so that such a delete does not compile.
+	~BluetoothMapStatusObserver() = default;
 };
 
 /**
@@ -506,7 +511,7 @@ protected:
 	 */
 	BluetoothMapStatusObserver *getMapObserver()
 	{
-		static BluetoothMapStatusObserver nullObserver;
+		static struct : BluetoothMapStatusObserver {} nullObserver;	// the interface's destructor is protected
 
 		if (!observer)
 			return &nullObserver;

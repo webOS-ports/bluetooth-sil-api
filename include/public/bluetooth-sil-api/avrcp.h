@@ -959,6 +959,11 @@ public:
 	 */
 	virtual void currentFolderReceived(const std::string /*currentFolder*/,
 									   const std::string &/*adapterAddress*/, const std::string &/*address*/){};
+
+protected:
+	// Not deleted through this interface (that would need a virtual destructor, which changes the layout
+	// SILs and the service share): protected, so that such a delete does not compile.
+	~BluetoothAvrcpStatusObserver() = default;
 };
 
 /**
@@ -1200,7 +1205,7 @@ protected:
 	 */
 	BluetoothAvrcpStatusObserver* getAvrcpObserver()
 	{
-		static BluetoothAvrcpStatusObserver nullObserver;
+		static struct : BluetoothAvrcpStatusObserver {} nullObserver;	// the interface's destructor is protected
 
 		if (!observer)
 			return &nullObserver;

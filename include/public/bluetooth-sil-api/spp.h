@@ -53,6 +53,11 @@ public:
 	 * @param size Data size in bytes
 	 */
 	virtual void dataReceived(const BluetoothSppChannelId /*channelId*/, const std::string &/*adapterAddress*/, const uint8_t */*data*/, const uint32_t /*size*/) {}
+
+protected:
+	// Not deleted through this interface (that would need a virtual destructor, which changes the layout
+	// SILs and the service share): protected, so that such a delete does not compile.
+	~BluetoothSppStatusObserver() = default;
 };
 
 /**
@@ -162,7 +167,7 @@ protected:
 	 */
 	BluetoothSppStatusObserver* getSppObserver()
 	{
-		static BluetoothSppStatusObserver nullObserver;
+		static struct : BluetoothSppStatusObserver {} nullObserver;	// the interface's destructor is protected
 
 		if (!observer)
 			return &nullObserver;

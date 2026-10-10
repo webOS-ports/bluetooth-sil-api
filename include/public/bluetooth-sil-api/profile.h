@@ -44,6 +44,11 @@ public:
 	 * @param properties List of properties which have changed.
 	 */
 	virtual void propertiesChanged(const std::string &/*adapterAddress*/, const std::string &/*address*/, BluetoothPropertiesList /*properties*/) { }
+
+protected:
+	// Not deleted through this interface (that would need a virtual destructor, which changes the layout
+	// SILs and the service share): protected, so that such a delete does not compile.
+	~BluetoothProfileStatusObserver() = default;
 };
 
 /**
@@ -169,7 +174,7 @@ protected:
 	 */
 	BluetoothProfileStatusObserver* getObserver()
 	{
-		static BluetoothProfileStatusObserver nullObserver;
+		static struct : BluetoothProfileStatusObserver {} nullObserver;	// the interface's destructor is protected
 
 		if (!observer)
 			return &nullObserver;

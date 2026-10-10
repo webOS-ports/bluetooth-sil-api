@@ -381,6 +381,11 @@ public:
 	 * @param delay is delay reported from remote device
 	*/
 	virtual void delayReportChanged(const std::string &/*adapterAddress*/, const std::string &/*address*/, uint16_t /*delay*/) { }
+
+protected:
+	// Not deleted through this interface (that would need a virtual destructor, which changes the layout
+	// SILs and the service share): protected, so that such a delete does not compile.
+	~BluetoothA2dpStatusObserver() = default;
 };
 
 /**
@@ -455,7 +460,7 @@ protected:
 	 */
 	BluetoothA2dpStatusObserver *getA2dpObserver()
 	{
-		static BluetoothA2dpStatusObserver nullObserver;
+		static struct : BluetoothA2dpStatusObserver {} nullObserver;	// the interface's destructor is protected
 
 		if (!observer)
 			return &nullObserver;

@@ -75,6 +75,11 @@ public:
 	 * @param finished Indicates wether the receiving bytes is still running or finished
 	*/
 	virtual void transferStateChanged(BluetoothOppTransferId /*transferId*/, uint64_t /*transferred*/, bool /*finished*/) { }
+
+protected:
+	// Not deleted through this interface (that would need a virtual destructor, which changes the layout
+	// SILs and the service share): protected, so that such a delete does not compile.
+	~BluetoothOppStatusObserver() = default;
 };
 
 /**
@@ -146,7 +151,7 @@ protected:
 	 */
 	BluetoothOppStatusObserver* getOppObserver()
 	{
-		static BluetoothOppStatusObserver nullObserver;
+		static struct : BluetoothOppStatusObserver {} nullObserver;	// the interface's destructor is protected
 
 		if (!observer)
 			return &nullObserver;

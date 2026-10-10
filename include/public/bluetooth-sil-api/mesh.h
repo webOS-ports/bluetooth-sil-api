@@ -615,6 +615,11 @@ public:
 									uint16_t /*keyRefreshPhase*/,
 									uint16_t /*nodeAddress*/ = 0,
 									uint16_t /*appKeyIndex*/ = 0) {}
+
+protected:
+	// Not deleted through this interface (that would need a virtual destructor, which changes the layout
+	// SILs and the service share): protected, so that such a delete does not compile.
+	~BluetoothMeshObserver() = default;
 };
 
 /** Class representing the APIs that bluetooth2 service can call to support BLE Mesh.
@@ -1038,7 +1043,7 @@ protected:
 	 */
 	BluetoothMeshObserver *getMeshObserver()
 	{
-		static BluetoothMeshObserver nullObserver;
+		static struct : BluetoothMeshObserver {} nullObserver;	// the interface's destructor is protected
 
 		if (!observer)
 			return &nullObserver;

@@ -870,6 +870,11 @@ public:
 				const BluetoothGattValue &/*value*/, bool /*response*/ = true) { }
 	virtual void characteristicValueWriteRequested(uint32_t /*requestId*/, const std::string &/*address*/, uint16_t /*serviceId*/, uint16_t /*charId*/,
 						       const BluetoothGattValue &/*value*/, ContinueType /*contType*/, bool /*response*/ = true) { }
+
+protected:
+	// Not deleted through this interface (that would need a virtual destructor, which changes the layout
+	// SILs and the service share): protected, so that such a delete does not compile.
+	~BluetoothGattProfileStatusObserver() = default;
 };
 
 /**
@@ -1674,7 +1679,7 @@ protected:
 	 */
 	BluetoothGattProfileStatusObserver* getGattObserver()
 	{
-		static BluetoothGattProfileStatusObserver nullObserver;
+		static struct : BluetoothGattProfileStatusObserver {} nullObserver;	// the interface's destructor is protected
 
 		if (!gattObserver)
 			return &nullObserver;

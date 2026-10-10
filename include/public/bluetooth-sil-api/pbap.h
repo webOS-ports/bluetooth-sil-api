@@ -168,6 +168,11 @@ public:
 	 * @param state state of current transfer
 	 */
 	virtual void transferStatusChanged(const std::string &/*adapterAddress*/, const std::string &/*address*/, const std::string &/*destinationPath*/, const std::string &/*objectPath*/, const std::string &/*state*/) { }
+
+protected:
+	// Not deleted through this interface (that would need a virtual destructor, which changes the layout
+	// SILs and the service share): protected, so that such a delete does not compile.
+	~BluetoothPbapStatusObserver() = default;
 };
 
 /**
@@ -323,7 +328,7 @@ protected:
 	 */
 	BluetoothPbapStatusObserver *getPbapObserver()
 	{
-		static BluetoothPbapStatusObserver nullObserver;
+		static struct : BluetoothPbapStatusObserver {} nullObserver;	// the interface's destructor is protected
 
 		if (!observer)
 			return &nullObserver;

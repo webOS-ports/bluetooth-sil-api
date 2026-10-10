@@ -158,6 +158,11 @@ public:
 	 * @param resultCode Result code which is sent from a remote device(AG)
 	 */
 	virtual void resultCodeReceived(const std::string &/*address*/, const std::string &/*resultCode*/) { }
+
+protected:
+	// Not deleted through this interface (that would need a virtual destructor, which changes the layout
+	// SILs and the service share): protected, so that such a delete does not compile.
+	~BluetoothHfpStatusObserver() = default;
 };
 
 /**
@@ -234,7 +239,7 @@ protected:
 	 */
 	BluetoothHfpStatusObserver *getHfpObserver()
 	{
-		static BluetoothHfpStatusObserver nullObserver;
+		static struct : BluetoothHfpStatusObserver {} nullObserver;	// the interface's destructor is protected
 
 		if (!observer)
 			return &nullObserver;

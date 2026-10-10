@@ -149,6 +149,11 @@ protected:
 
 private:
 	BluetoothHidStatusObserver *observer{};
+
+protected:
+	// Not deleted through this interface (that would need a virtual destructor, which changes the layout
+	// SILs and the service share): protected, so that such a delete does not compile.
+	~BluetoothHidProfile() = default;
 };
 
 #endif
