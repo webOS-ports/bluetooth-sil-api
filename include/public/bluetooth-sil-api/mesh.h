@@ -37,11 +37,11 @@ public:
 	void setKeyRefresh(bool keyRefresh) { this->keyRefresh = keyRefresh; }
 private:
 	/** @brief Network key index */
-	uint16_t index;
+	uint16_t index{};
 	/** @brief When true, indicates that the specified net key
 	 * is in the middle of a key refresh procedure.
 	 */
-	bool keyRefresh;
+	bool keyRefresh{};
 };
 
 /**
@@ -58,9 +58,9 @@ public:
 	void setBoundNetKeyIndex(uint16_t boundNetKeyIndex) { this->boundNetKeyIndex = boundNetKeyIndex; }
 private:
 	/** @brief Application key index */
-	uint16_t index;
+	uint16_t index{};
 	/** @brief Network key index to which the app key is bound to */
-	uint16_t boundNetKeyIndex;
+	uint16_t boundNetKeyIndex{};
 };
 
 /**
@@ -83,15 +83,15 @@ private:
 	/** @brief Name of the provisioner */
 	std::string name;
 	/** @brief Unicast address of the provisioner */
-	uint16_t unicastAddress;
+	uint16_t unicastAddress{};
 	/** @brief Lowest unicast address in the address range that provisioner will
 	 * assign to the mesh nodes
 	 */
-	uint16_t lowAddress;
+	uint16_t lowAddress{};
 	/** @brief Highest unicast address in the address range that provisioner will
 	 * assign to the mesh nodes
 	 */
-	uint16_t highAddress;
+	uint16_t highAddress{};
 };
 
 /**
@@ -409,12 +409,12 @@ private:
 	 * 0x02 - The Proxy feature is not supported
 	 * Note: This information will be sent when config is GATT_PROXY
 	 */
-	uint8_t gattProxyState;
+	uint8_t gattProxyState{};
 
 	/** TTL
 	 *Values will be in the range: 0x00, 0x02–0x7F
 	 */
-	uint8_t ttl;
+	uint8_t ttl{};
 
 	/** Current Relay and Relay Retransmit states of a node
 	 * Note: This information will be sent when config is RELAY
@@ -428,22 +428,22 @@ private:
 	/** onOffState
 	* onOff State received from remote device if supported
 	*/
-	bool onOffState;
+	bool onOffState{};
 
 	/** nodeAddress
 	* unicast address of the remote node
 	*/
-	uint16_t nodeAddress;
+	uint16_t nodeAddress{};
 
 	/** netKeyIndex
 	* updated netKeyIndex of the remote node
 	*/
-	uint16_t netKeyIndex;
+	uint16_t netKeyIndex{};
 
 	/** appKeyIndex
 	* updated appKeyIndex of the remote node
 	*/
-	uint16_t appKeyIndex;
+	uint16_t appKeyIndex{};
 };
 
 /** @brief Class representing the payload for send() API when the command in send
@@ -466,7 +466,7 @@ public:
 	 * value = true - ON
 	 * value = false - OFF
 	 */
-	bool value;
+	bool value{};
 };
 
 /** @brief Class representing the payload for send() API */

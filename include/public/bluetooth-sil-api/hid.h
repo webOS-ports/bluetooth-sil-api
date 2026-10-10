@@ -148,7 +148,7 @@ protected:
 	}
 
 private:
-	BluetoothHidStatusObserver *observer;
+	BluetoothHidStatusObserver *observer{};
 };
 
 #endif
