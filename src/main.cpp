@@ -121,7 +121,7 @@ BluetoothSIL *create_sil(char *path, BluetoothPairingIOCapability capability)
 	return sil;
 }
 
-static gboolean check_adapter_available(gpointer user_data)
+static gboolean check_adapter_available(gpointer /*user_data*/)
 {
 	g_assert_true(silObserver->adapterAvailable);
 	defaultAdapter = sil->getDefaultAdapter();
@@ -131,7 +131,7 @@ static gboolean check_adapter_available(gpointer user_data)
         return FALSE;
 }
 
-static gboolean get_default_adapter(gpointer user_data)
+static gboolean get_default_adapter(gpointer /*user_data*/)
 {
 	clear_source(&gIdleSource);
 	defaultAdapter = sil->getDefaultAdapter();

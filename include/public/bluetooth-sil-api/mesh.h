@@ -503,9 +503,9 @@ public:
 	 * @param destAddress Destination address
 	 * @param data Incoming message
 	 */
-	virtual void modelDataReceived(const std::string &adapterAddress,
-								   uint16_t srcAddress, uint16_t destAddress,
-								   uint16_t appKey, uint8_t data[], uint32_t datalen) {}
+	virtual void modelDataReceived(const std::string &/*adapterAddress*/,
+								   uint16_t /*srcAddress*/, uint16_t /*destAddress*/,
+								   uint16_t /*appKey*/, uint8_t /*data*/[], uint32_t /*datalen*/) {}
 
 	/**
 	 * @brief This method is called when any unprovisioned device is discovered.
@@ -515,7 +515,7 @@ public:
 	 * @param uuid UUID of the device discovered.
 	 * @param name Name of the device discovered.
 	 */
-	virtual void scanResult(const std::string &adapterAddress, const int16_t rssi, const std::string &uuid, const std::string &name = "") {}
+	virtual void scanResult(const std::string &/*adapterAddress*/, const int16_t /*rssi*/, const std::string &/*uuid*/, const std::string &/*name*/ = "") {}
 
 	/**
 	 * @brief This method is called when any unprovisioned device is discovered.
@@ -524,7 +524,7 @@ public:
 	 * @param configuration Class representing the configuration data that can be retrieved from a node
 	 * @param error Success or failure of provisioning
 	 */
-	virtual void modelConfigResult(const std::string &adapterAddress, BleMeshConfiguration &configuration, BluetoothError error) {}
+	virtual void modelConfigResult(const std::string &/*adapterAddress*/, BleMeshConfiguration &/*configuration*/, BluetoothError /*error*/) {}
 
 	/**
 	 * @brief This method is called when any onOff model status is received.
@@ -533,7 +533,7 @@ public:
 	 * @param onOffState received state
 	 * @param error Success or failure
 	 */
-	virtual void modelSetOnOffResult(const std::string &adapterAddress, bool onOffState, BluetoothError error) {}
+	virtual void modelSetOnOffResult(const std::string &/*adapterAddress*/, bool /*onOffState*/, BluetoothError /*error*/) {}
 
 	/**
 	 * @brief This method is called when any unprovisioned device is discovered.
@@ -541,7 +541,7 @@ public:
 	 * @param adapterAddress Adapter Address
 	 * @param networkId networkId of created network
 	 */
-	virtual void updateNetworkId(const std::string &adapterAddress, const uint64_t networkId = 0) {}
+	virtual void updateNetworkId(const std::string &/*adapterAddress*/, const uint64_t /*networkId*/ = 0) {}
 
 	/**
 	 * @brief This method is called when provisioning of a device is success or failed.
@@ -588,15 +588,15 @@ public:
 	 *	to the new node.
 	 * @param uuid Device uuid
 	 */
-	virtual void provisionResult(BluetoothError error, const std::string &adapterAddress,
-								 const std::string &request = "",
-								 const std::string &stringToDisplay = "",
-								 const uint32_t numberToDisplay = 0,
-								 const std::string &numberDisplayType ="",
-								 const std::string &promptType = "",
-								 uint16_t unicastAddress = 0,
-								 uint8_t count = 0,
-								 const std::string &uuid = "") {}
+	virtual void provisionResult(BluetoothError /*error*/, const std::string &/*adapterAddress*/,
+								 const std::string &/*request*/ = "",
+								 const std::string &/*stringToDisplay*/ = "",
+								 const uint32_t /*numberToDisplay*/ = 0,
+								 const std::string &/*numberDisplayType*/ ="",
+								 const std::string &/*promptType*/ = "",
+								 uint16_t /*unicastAddress*/ = 0,
+								 uint8_t /*count*/ = 0,
+								 const std::string &/*uuid*/ = "") {}
 	/**
 	 * @brief This method is called to inform about the key refresh intermediate
 	 * result as well as when key refresh procedure completes
@@ -609,12 +609,12 @@ public:
 	 * @param nodeAddress Node address for any error occurd
 	 * @param appKeyIndex appKeyIndex for which updated failed for any node
 	 */
-	virtual void keyRefreshResult(BluetoothError error, const std::string &adapterAddress,
-									uint16_t netKeyIndex,
-									std::string &status,
-									uint16_t keyRefreshPhase,
-									uint16_t nodeAddress = 0,
-									uint16_t appKeyIndex = 0) {}
+	virtual void keyRefreshResult(BluetoothError /*error*/, const std::string &/*adapterAddress*/,
+									uint16_t /*netKeyIndex*/,
+									std::string &/*status*/,
+									uint16_t /*keyRefreshPhase*/,
+									uint16_t /*nodeAddress*/ = 0,
+									uint16_t /*appKeyIndex*/ = 0) {}
 };
 
 /** Class representing the APIs that bluetooth2 service can call to support BLE Mesh.
@@ -646,7 +646,7 @@ public:
 	 *               Pass PB-GATT for PB-GATT bearer
 	 *               Pass PB-ADV for PB-ADV bearer
 	 */
-	virtual BluetoothError createNetwork(const std::string &bearer)
+	virtual BluetoothError createNetwork(const std::string &/*bearer*/)
 	{
 		return BLUETOOTH_ERROR_UNSUPPORTED;
 	}
@@ -663,7 +663,7 @@ public:
 	 *         Possible errors: BLUETOOTH_ERROR_FAIL,
 	 *                          BLUETOOTH_ERROR_NONE
 	 */
-	virtual BluetoothError attach(const std::string &bearer, const std::string &token)
+	virtual BluetoothError attach(const std::string &/*bearer*/, const std::string &/*token*/)
 	{
 		return BLUETOOTH_ERROR_UNSUPPORTED;
 	}
@@ -677,7 +677,7 @@ public:
 	 *               Pass PB-ADV for PB-ADV bearer
 	 * @param callback Callback called to provide meshInfo
 	 */
-	virtual void getMeshInfo(const std::string &bearer, BleMeshInfoCallback callback)
+	virtual void getMeshInfo(const std::string &/*bearer*/, BleMeshInfoCallback callback)
 	{
 		BleMeshInfo meshInfo;
 		if (callback)
@@ -697,7 +697,7 @@ public:
 	 *                          BLUETOOTH_ERROR_NONE,
 	 *                          BLUETOOTH_ERROR_BUSY
 	 */
-	virtual BluetoothError scanUnprovisionedDevices(const std::string &bearer, const uint16_t scanTimeout)
+	virtual BluetoothError scanUnprovisionedDevices(const std::string &/*bearer*/, const uint16_t /*scanTimeout*/)
 	{
 		return BLUETOOTH_ERROR_UNSUPPORTED;
 	}
@@ -713,7 +713,7 @@ public:
 	 *                          BLUETOOTH_ERROR_NONE,
 	 *                          BLUETOOTH_ERROR_BUSY
 	 */
-	virtual BluetoothError unprovisionedScanCancel(const std::string &bearer)
+	virtual BluetoothError unprovisionedScanCancel(const std::string &/*bearer*/)
 	{
 		return BLUETOOTH_ERROR_UNSUPPORTED;
 	}
@@ -741,8 +741,8 @@ public:
 	 *         Possible errors: BLUETOOTH_ERROR_FAIL,
 	 *                          BLUETOOTH_ERROR_NONE,
 	 */
-	virtual BluetoothError provision(const std::string &bearer, const std::string &uuid,
-										const uint16_t timeout)
+	virtual BluetoothError provision(const std::string &/*bearer*/, const std::string &/*uuid*/,
+										const uint16_t /*timeout*/)
 	{
 		return BLUETOOTH_ERROR_UNSUPPORTED;
 	}
@@ -761,7 +761,7 @@ public:
 	 *                          BLUETOOTH_ERROR_NONE,
 	 *                          BLUETOOTH_ERROR_NOT_ALLOWED
 	 */
-	virtual BluetoothError supplyProvisioningNumeric(const std::string &bearer, uint32_t number)
+	virtual BluetoothError supplyProvisioningNumeric(const std::string &/*bearer*/, uint32_t /*number*/)
 	{
 		return BLUETOOTH_ERROR_UNSUPPORTED;
 	}
@@ -780,7 +780,7 @@ public:
 	 *                          BLUETOOTH_ERROR_NONE,
 	 *                          BLUETOOTH_ERROR_NOT_ALLOWED
 	 */
-	virtual BluetoothError supplyProvisioningOob(const std::string &bearer, const std::string &oobData)
+	virtual BluetoothError supplyProvisioningOob(const std::string &/*bearer*/, const std::string &/*oobData*/)
 	{
 		return BLUETOOTH_ERROR_UNSUPPORTED;
 	}
@@ -799,7 +799,7 @@ public:
 	 *         Possible errors: BLUETOOTH_ERROR_FAIL,
 	 *                          BLUETOOTH_ERROR_NONE,
 	 */
-	virtual BluetoothError getCompositionData(const std::string &bearer, uint16_t destAddress)
+	virtual BluetoothError getCompositionData(const std::string &/*bearer*/, uint16_t /*destAddress*/)
 	{
 		return BLUETOOTH_ERROR_UNSUPPORTED;
 	}
@@ -821,8 +821,8 @@ public:
 	 *                          BLUETOOTH_ERROR_NONE,
 	 *                          BLUETOOTH_ERROR_NOT_ALLOWED
 	 */
-	virtual BluetoothError createAppKey(const std::string &bearer, uint16_t netKeyIndex,
-										uint16_t appKeyIndex)
+	virtual BluetoothError createAppKey(const std::string &/*bearer*/, uint16_t /*netKeyIndex*/,
+										uint16_t /*appKeyIndex*/)
 	{
 		return BLUETOOTH_ERROR_UNSUPPORTED;
 	}
@@ -851,10 +851,10 @@ public:
 	 *                          BLUETOOTH_ERROR_NOT_ALLOWED,
 	 *                          BLUETOOTH_ERROR_MESH_APP_KEY_INDEX_DOES_NOT_EXIST
 	 */
-	virtual BluetoothError modelSend(const std::string &bearer, uint16_t srcAddress,
-									 uint16_t destAddress, uint16_t appKeyIndex,
-									 const std::string &command,
-									 BleMeshPayload &payload)
+	virtual BluetoothError modelSend(const std::string &/*bearer*/, uint16_t /*srcAddress*/,
+									 uint16_t /*destAddress*/, uint16_t /*appKeyIndex*/,
+									 const std::string &/*command*/,
+									 BleMeshPayload &/*payload*/)
 	{
 		return BLUETOOTH_ERROR_UNSUPPORTED;
 	}
@@ -880,8 +880,8 @@ public:
 	 *                          BLUETOOTH_ERROR_NOT_ALLOWED,
 	 *                          BLUETOOTH_ERROR_MESH_APP_KEY_INDEX_DOES_NOT_EXIST
 	 */
-	virtual BluetoothError setOnOff(const std::string &bearer,
-									 uint16_t destAddress, uint16_t appKeyIndex, bool onoff, bool ack = false)
+	virtual BluetoothError setOnOff(const std::string &/*bearer*/,
+									 uint16_t /*destAddress*/, uint16_t /*appKeyIndex*/, bool /*onoff*/, bool /*ack*/ = false)
 	{
 		return BLUETOOTH_ERROR_UNSUPPORTED;
 	}
@@ -907,10 +907,10 @@ public:
 	 *                          BLUETOOTH_ERROR_MESH_APP_KEY_INDEX_DOES_NOT_EXIST,
 	 *                          BLUETOOTH_ERROR_MESH_NET_KEY_INDEX_DOES_NOT_EXIST
 	 */
-	virtual BluetoothError configGet(const std::string &bearer,
-										uint16_t destAddress,
-										const std::string &config,
-										uint16_t netKeyIndex = 0)
+	virtual BluetoothError configGet(const std::string &/*bearer*/,
+										uint16_t /*destAddress*/,
+										const std::string &/*config*/,
+										uint16_t /*netKeyIndex*/ = 0)
 	{
 		return BLUETOOTH_ERROR_UNSUPPORTED;
 	}
@@ -954,9 +954,9 @@ public:
 	 *                          BLUETOOTH_ERROR_MESH_NET_KEY_INDEX_DOES_NOT_EXIST
 	 */
 	virtual BluetoothError configSet(
-		const std::string &bearer, uint16_t destAddress, const std::string &config,
-		uint8_t gattProxyState = 0, uint16_t netKeyIndex = 0, uint16_t appKeyIndex = 0,
-		uint32_t modelId = 0, uint8_t ttl = 0, BleMeshRelayStatus *relayStatus = NULL)
+		const std::string &/*bearer*/, uint16_t /*destAddress*/, const std::string &/*config*/,
+		uint8_t /*gattProxyState*/ = 0, uint16_t /*netKeyIndex*/ = 0, uint16_t /*appKeyIndex*/ = 0,
+		uint32_t /*modelId*/ = 0, uint8_t /*ttl*/ = 0, BleMeshRelayStatus */*relayStatus*/ = NULL)
 	{
 		return BLUETOOTH_ERROR_UNSUPPORTED;
 	}
@@ -977,7 +977,7 @@ public:
 	 *                          BLUETOOTH_ERROR_NOT_ALLOWED
 	 */
 	virtual BluetoothError deleteNode(
-		const std::string &bearer, uint16_t destAddress, uint8_t count)
+		const std::string &/*bearer*/, uint16_t /*destAddress*/, uint8_t /*count*/)
 	{
 		return BLUETOOTH_ERROR_UNSUPPORTED;
 	}
@@ -993,8 +993,8 @@ public:
 	 *         Possible errors: BLUETOOTH_ERROR_FAIL,
 	 *                          BLUETOOTH_ERROR_NONE
 	 */
-	virtual BluetoothError updateNodeInfo(const std::string &bearer,
-								std::vector<uint16_t> &unicastAddresses)
+	virtual BluetoothError updateNodeInfo(const std::string &/*bearer*/,
+								std::vector<uint16_t> &/*unicastAddresses*/)
 	{
 		return BLUETOOTH_ERROR_UNSUPPORTED;
 	}
@@ -1015,13 +1015,13 @@ public:
 	 * @param waitTime Indicates the total duration (in seconds) to wait for
 	 *                 each phase to complete during keyRefresh process.
 	 */
-	virtual void keyRefresh(BluetoothResultCallback callback, const std::string &bearer,
-								  bool refreshAppKeys,
-								  std::vector<uint16_t> appKeyIndexesToRefresh,
-								  std::vector<uint16_t> blackListedNodes,
-								  std::vector<BleMeshNode> nodes,
-								  uint16_t netKeyIndex = 0,
-								  int32_t waitTime = 0)
+	virtual void keyRefresh(BluetoothResultCallback callback, const std::string &/*bearer*/,
+								  bool /*refreshAppKeys*/,
+								  std::vector<uint16_t> /*appKeyIndexesToRefresh*/,
+								  std::vector<uint16_t> /*blackListedNodes*/,
+								  std::vector<BleMeshNode> /*nodes*/,
+								  uint16_t /*netKeyIndex*/ = 0,
+								  int32_t /*waitTime*/ = 0)
 	{
 		callback(BLUETOOTH_ERROR_UNSUPPORTED);
 	}

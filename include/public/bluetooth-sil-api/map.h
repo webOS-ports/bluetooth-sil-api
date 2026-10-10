@@ -266,6 +266,8 @@ public:
 	{
 	}
 
+	BluetoothMapProperty &operator=(const BluetoothMapProperty &other) = default;
+
 	/**
 	 * @brief Initialize the property with a type and a value
 	 * @param type Type of the property
@@ -359,7 +361,7 @@ public:
 	 * @param sessionId Unique identifier of a session which was returned from map/connect.
 	 * @param properties List of event properties which have changed.
 	 */
-	virtual void messageNotificationEvent(const std::string &adapterAddress, const std::string &sessionId, BluetoothMessageList &properties) { }
+	virtual void messageNotificationEvent(const std::string &/*adapterAddress*/, const std::string &/*sessionId*/, BluetoothMessageList &/*properties*/) { }
 };
 
 /**

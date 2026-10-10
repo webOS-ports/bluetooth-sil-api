@@ -139,6 +139,8 @@ public:
 	{
 	}
 
+	BluetoothSbcConfiguration &operator=(const BluetoothSbcConfiguration &other) = default;
+
 	/**
 	 * @brief Retrieve the sample frequency of the SBC configuration
 	 * @return Sample frequency of the SBC configuration
@@ -282,6 +284,8 @@ public:
 	{
 	}
 
+	BluetoothAptxConfiguration &operator=(const BluetoothAptxConfiguration &other) = default;
+
 	/**
 	 * @brief Retrieve the sample frequency of the aptX configuration
 	 * @return Sample frequency of the aptX configuration
@@ -323,7 +327,7 @@ public:
 	 * @param address Address of the device
 	 * @param state current playing state of the A2DP profile.
 	*/
-	virtual void stateChanged(std::string address, BluetoothA2dpProfileState state) { }
+	virtual void stateChanged(std::string /*address*/, BluetoothA2dpProfileState /*state*/) { }
 
 	/**
 	 * @brief The method is called when the profile state is changed
@@ -331,7 +335,7 @@ public:
 	 * @param address Address of the device
 	 * @param state current playing state of the A2DP profile.
 	*/
-	virtual void stateChanged(std::string adapterAddress, std::string address, BluetoothA2dpProfileState state) { }
+	virtual void stateChanged(std::string /*adapterAddress*/, std::string /*address*/, BluetoothA2dpProfileState /*state*/) { }
 
 	/**
 	 * @brief The method is called when A2DP audio socket is created
@@ -341,7 +345,7 @@ public:
 	 * @param type Audio socket type
 	 * @param isIn Whether audio stream is in or out from remote device to local device
 	*/
-	virtual void audioSocketCreated(const std::string &address, const std::string &path, BluetoothA2dpAudioSocketType type, bool isIn) { }
+	virtual void audioSocketCreated(const std::string &/*address*/, const std::string &/*path*/, BluetoothA2dpAudioSocketType /*type*/, bool /*isIn*/) { }
 
 	/**
 	 * @brief The method is called when A2DP audio socket is destroyed
@@ -351,7 +355,7 @@ public:
 	 * @param type Audio socket type
 	 * @param isIn Whether audio stream is in or out from remote device to local device
 	*/
-	virtual void audioSocketDestroyed(const std::string &address, const std::string &path, BluetoothA2dpAudioSocketType type, bool isIn) { }
+	virtual void audioSocketDestroyed(const std::string &/*address*/, const std::string &/*path*/, BluetoothA2dpAudioSocketType /*type*/, bool /*isIn*/) { }
 
 	/**
 	 * @brief The method is called when A2DP SBC Configuration is changed.
@@ -359,7 +363,7 @@ public:
 	 * @param address Address of the remote device
 	 * @param sbcConfiguration SBC configuration
 	*/
-	virtual void sbcConfigurationChanged(const std::string &address, const BluetoothSbcConfiguration &sbcConfiguration) { }
+	virtual void sbcConfigurationChanged(const std::string &/*address*/, const BluetoothSbcConfiguration &/*sbcConfiguration*/) { }
 
 	/**
 	 * @brief The method is called when A2DP aptX Configuration is changed.
@@ -367,7 +371,7 @@ public:
 	 * @param address Address of the remote device
 	 * @param sbcConfiguration aptX configuration
 	*/
-	virtual void aptxConfigurationChanged(const std::string &address, const BluetoothAptxConfiguration &aptxConfiguration) { }
+	virtual void aptxConfigurationChanged(const std::string &/*address*/, const BluetoothAptxConfiguration &/*aptxConfiguration*/) { }
 
 	/**
 	 * @brief The method is called when A2DP remote device delay changed
@@ -376,7 +380,7 @@ public:
 	 * @param address Address of the remote device
 	 * @param delay is delay reported from remote device
 	*/
-	virtual void delayReportChanged(const std::string &adapterAddress, const std::string &address, uint16_t delay) { }
+	virtual void delayReportChanged(const std::string &/*adapterAddress*/, const std::string &/*address*/, uint16_t /*delay*/) { }
 };
 
 /**
@@ -423,21 +427,21 @@ public:
 	 * @param bitpool Bitpool of SBC Encoder Settings
 	 * @return BLUETOOTH_ERROR_NONE when operation was successful another error code otherwise
 	 */
-	virtual BluetoothError setSbcEncoderBitpool(const std::string &address, uint8_t bitpool) { return BLUETOOTH_ERROR_UNSUPPORTED; }
+	virtual BluetoothError setSbcEncoderBitpool(const std::string &/*address*/, uint8_t /*bitpool*/) { return BLUETOOTH_ERROR_UNSUPPORTED; }
 
 	/**
 	 * @brief Enable/Disable delay reporting
 	 *
 	 * @param state Set state of delay reporting
 	 */
-	virtual BluetoothError setDelayReportingState(bool state) { return BLUETOOTH_ERROR_UNSUPPORTED; }
+	virtual BluetoothError setDelayReportingState(bool /*state*/) { return BLUETOOTH_ERROR_UNSUPPORTED; }
 
 	/**
 	 * @brief Get delay reporting state
 	 *
 	 * @param state Get state of delay reporting
 	 */
-	virtual BluetoothError getDelayReportingState(bool &state) { return BLUETOOTH_ERROR_UNSUPPORTED; }
+	virtual BluetoothError getDelayReportingState(bool &/*state*/) { return BLUETOOTH_ERROR_UNSUPPORTED; }
 
 protected:
 	/**

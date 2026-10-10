@@ -149,15 +149,15 @@ public:
 	 * @param address Address of the device
 	 * @param deviceName deviceName of the device
 	*/
-	virtual void accessRequested(BluetoothPbapAccessRequestId accessRequestId, const std::string &address,
-	        const std::string &deviceName) { }
+	virtual void accessRequested(BluetoothPbapAccessRequestId /*accessRequestId*/, const std::string &/*address*/,
+	        const std::string &/*deviceName*/) { }
 
 	/**
 	 * @brief The method is called when a PBAP specific property changes
 	 *
 	 * @param properties List of properties which have changed.
 	 */
-	virtual void profilePropertiesChanged(const std::string &adapterAddress, const std::string &address, BluetoothPbapApplicationParameters &properties) { }
+	virtual void profilePropertiesChanged(const std::string &/*adapterAddress*/, const std::string &/*address*/, BluetoothPbapApplicationParameters &/*properties*/) { }
 	/**
 	 * @brief The method is called when PhoneBook transfer status changes
 	 *
@@ -167,7 +167,7 @@ public:
 	 * @param objectPath unique key for each transfer
 	 * @param state state of current transfer
 	 */
-	virtual void transferStatusChanged(const std::string &adapterAddress, const std::string &address, const std::string &destinationPath, const std::string &objectPath, const std::string &state) { }
+	virtual void transferStatusChanged(const std::string &/*adapterAddress*/, const std::string &/*address*/, const std::string &/*destinationPath*/, const std::string &/*objectPath*/, const std::string &/*state*/) { }
 };
 
 /**

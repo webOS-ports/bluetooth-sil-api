@@ -40,10 +40,11 @@ gboolean scoConnected = FALSE;
 class TestHfpObserver: public BluetoothHfpStatusObserver
 {
 public:
+	virtual ~TestHfpObserver() {}
 
-	virtual void scoStateChanged(const std::string &address, bool state) { }
+	virtual void scoStateChanged(const std::string &/*address*/, bool /*state*/) { }
 
-	virtual void atCommandReceived(const std::string &address, const BluetoothHfpAtCommand &atCommand)
+	virtual void atCommandReceived(const std::string &/*address*/, const BluetoothHfpAtCommand &atCommand)
 	{
 		// Send response to CIND for SLC connection establishment
 		if ("+CIND" == atCommand.getCommand())
@@ -71,7 +72,7 @@ static void hfp_profile_connect_callback(BluetoothError error)
 	g_main_loop_quit(mainLoop);
 }
 
-static gboolean check_hfp_state_timeout(gpointer user_data)
+static gboolean check_hfp_state_timeout(gpointer /*user_data*/)
 {
 	// this is the overall timeout that should only fire if (e.g.) unable to connect/disconnect to BT headset for hfp profile
 	g_assert_not_reached();
@@ -81,7 +82,7 @@ static gboolean check_hfp_state_timeout(gpointer user_data)
 	return FALSE;
 }
 
-static gboolean check_adapter_initialize(gpointer user_data)
+static gboolean check_adapter_initialize(gpointer /*user_data*/)
 {
 	clear_source(&gTimeoutSource);
 	g_main_loop_quit(mainLoop);
@@ -90,7 +91,7 @@ static gboolean check_adapter_initialize(gpointer user_data)
 }
 
 // Need to call after some time as give some time to disconnect/disable BT
-static gboolean test_adapter_initialize(gpointer user_data)
+static gboolean test_adapter_initialize(gpointer /*user_data*/)
 {
 	clear_source(&gTimeoutSource);
 
@@ -125,7 +126,7 @@ static gboolean test_adapter_initialize(gpointer user_data)
 
 // Once paired and service UUIDS's are discovered, we turn off BT
 // Before BT enable, add a timer so that BT gets properly switched off before we enable the same
-static gboolean setup_test_hfp_initialize(gpointer user_data)
+static gboolean setup_test_hfp_initialize(gpointer /*user_data*/)
 {
 	clear_source(&gIdleSource);
 	gTimeoutSource = g_timeout_add(10000, test_adapter_initialize, (void *) NULL);
@@ -139,7 +140,7 @@ static void test_hfp_initialize(void)
 	g_main_loop_run(mainLoop);
 }
 
-static gboolean setup_test_hfp_connect(gpointer user_data)
+static gboolean setup_test_hfp_connect(gpointer /*user_data*/)
 {
 	DEBUG_MSG("");
 	clear_source(&gIdleSource);
@@ -168,7 +169,7 @@ static void test_hfp_connect(void)
 	g_main_loop_run(mainLoop);
 }
 
-static gboolean setup_test_hfp_disconnect(gpointer user_data)
+static gboolean setup_test_hfp_disconnect(gpointer /*user_data*/)
 {
 	DEBUG_MSG("");
 	clear_source(&gIdleSource);
@@ -220,7 +221,7 @@ static void hfp_profile_opensco_callback(BluetoothError error)
 	g_main_loop_quit(mainLoop);
 }
 
-static gboolean check_hfp_scostate_timeout(gpointer user_data)
+static gboolean check_hfp_scostate_timeout(gpointer /*user_data*/)
 {
 	// this is the overall timeout that should only fire if (e.g.) unable to open/close sco to BT headset
 	g_assert_not_reached();
@@ -231,7 +232,7 @@ static gboolean check_hfp_scostate_timeout(gpointer user_data)
 	return FALSE;
 }
 
-static gboolean check_hfp_openSco(gpointer user_data)
+static gboolean check_hfp_openSco(gpointer /*user_data*/)
 {
 	DEBUG_MSG("");
 	clear_source(&gCheckSource);
@@ -253,7 +254,7 @@ static gboolean check_hfp_openSco(gpointer user_data)
 	return FALSE;
 }
 
-static gboolean setup_test_open_sco(gpointer user_data)
+static gboolean setup_test_open_sco(gpointer /*user_data*/)
 {
 	clear_source(&gIdleSource);
 	g_assert_equal(connected, TRUE);
@@ -281,7 +282,7 @@ static void hfp_profile_closesco_callback(BluetoothError error)
 	g_main_loop_quit(mainLoop);
 }
 
-static gboolean check_hfp_closeSco(gpointer user_data)
+static gboolean check_hfp_closeSco(gpointer /*user_data*/)
 {
 	DEBUG_MSG("");
 	clear_source(&gCheckSource);
@@ -304,7 +305,7 @@ static gboolean check_hfp_closeSco(gpointer user_data)
 	return FALSE;
 }
 
-static gboolean setup_test_close_sco(gpointer user_data)
+static gboolean setup_test_close_sco(gpointer /*user_data*/)
 {
 	clear_source(&gIdleSource);
 	g_assert_equal(connected, TRUE);

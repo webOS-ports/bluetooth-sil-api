@@ -171,9 +171,8 @@ public:
 	 */
 	BluetoothGattDescriptor() :
 	    permissions(PERMISSION_NONE),
-	    write_type(DEFAULT),
-	    handle(0)
-	{
+	    handle(0),
+	    write_type(DEFAULT){
 	}
 
    /**
@@ -184,10 +183,11 @@ public:
 	    uuid(other.uuid),
 	    value(other.value),
 	    permissions(other.permissions),
-	    write_type(other.write_type),
-	    handle(other.handle)
-	{
+	    handle(other.handle),
+	    write_type(other.write_type){
 	}
+
+	BluetoothGattDescriptor &operator=(const BluetoothGattDescriptor &other) = default;
 
 	/**
 	 * @brief Check if the descriptor is valid or not
@@ -309,9 +309,8 @@ public:
 	BluetoothGattCharacteristic() :
 	    properties(PROPERTY_NONE),
 	    permissions(PERMISSION_NONE),
-	    write_type(DEFAULT),
-	    handle(0)
-	{
+	    handle(0),
+	    write_type(DEFAULT){
 	}
 
 	/**
@@ -324,10 +323,11 @@ public:
 	    descriptors(other.descriptors),
 	    properties(other.properties),
 	    permissions(other.permissions),
-	    write_type(other.write_type),
-	    handle(other.handle)
-	{
+	    handle(other.handle),
+	    write_type(other.write_type){
 	}
+
+	BluetoothGattCharacteristic &operator=(const BluetoothGattCharacteristic &other) = default;
 
 	/**
 	 * @brief Checks if the characteristic is a valid one.
@@ -567,9 +567,8 @@ public:
 	 * @param uuid UUID of the service
 	 */
 	BluetoothGattService(Type type, BluetoothUuid uuid) :
-	    type(type),
-	    uuid(uuid)
-	{
+	    uuid(uuid),
+	    type(type){
 	}
 
 	/**
@@ -583,6 +582,8 @@ public:
 	    characteristics(other.characteristics)
 	{
 	}
+
+	BluetoothGattService &operator=(const BluetoothGattService &other) = default;
 
 	/**
 	 * @brief Checks if the service is valid.
@@ -798,7 +799,7 @@ public:
 	 * @param address Address of the device the serivce is found on
 	 * @param service Service object which describes the found service.
 	 */
-	virtual void serviceFound(const std::string &address, const BluetoothGattService &service) { }
+	virtual void serviceFound(const std::string &/*address*/, const BluetoothGattService &/*service*/) { }
 
 	/**
 	 * @brief This method is called when service is lost.
@@ -806,7 +807,7 @@ public:
 	 * @param address Address of the device the service is lost for.
 	 * @param service Service object which describes the lost service.
 	 */
-	virtual void serviceLost(const std::string &address, const BluetoothGattService &service) { }
+	virtual void serviceLost(const std::string &/*address*/, const BluetoothGattService &/*service*/) { }
 
 	/**
 	 * @brief This method is called when the value of a specific characteristic on a remote
@@ -820,7 +821,7 @@ public:
 	 * @param characteristic Characteristic which has changed
 	 * @param adapterAddress Adapater address of the local device
 	 */
-	virtual void characteristicValueChanged(const std::string &address, const BluetoothUuid &service, const BluetoothGattCharacteristic &characteristic, const std::string &adapterAddress) { }
+	virtual void characteristicValueChanged(const std::string &/*address*/, const BluetoothUuid &/*service*/, const BluetoothGattCharacteristic &/*characteristic*/, const std::string &/*adapterAddress*/) { }
 
 	/**
 	 * @brief This method is called when the value of a specific characteristic of the
@@ -833,7 +834,7 @@ public:
 	 * @param characteristic Characteristic which has changed
 	 * @param adapterAddress Adapater address of the local device
 	 */
-	virtual void characteristicValueChanged(const BluetoothUuid &service, const BluetoothGattCharacteristic &characteristic, const std::string &adapterAddress) { }
+	virtual void characteristicValueChanged(const BluetoothUuid &/*service*/, const BluetoothGattCharacteristic &/*characteristic*/, const std::string &/*adapterAddress*/) { }
 
 	/**
 	 * @brief This method is called when the value of a specific descriptor of the
@@ -846,7 +847,7 @@ public:
 	 * @param characteristic UUID
 	 * @param descriptor which is changed
 	 */
-	virtual void descriptorValueChanged(const BluetoothUuid &service, const BluetoothUuid &characteristic, BluetoothGattDescriptor &descriptor) { }
+	virtual void descriptorValueChanged(const BluetoothUuid &/*service*/, const BluetoothUuid &/*characteristic*/, BluetoothGattDescriptor &/*descriptor*/) { }
 
 	/**
 	 * The method is called when an eSCO connection state is changed. That is a BLE security link is established.
@@ -854,7 +855,7 @@ public:
 	 * @param address Address of the device.
 	 * @param state True if a BLE security link is established from the remote device, false if the link goes down.
 	 */
-	virtual void incomingLeConnectionRequest(const std::string &address, bool state) { }
+	virtual void incomingLeConnectionRequest(const std::string &/*address*/, bool /*state*/) { }
 	/**
 	 * The method is called when an client try to read a characteristic.
 	 *
@@ -863,12 +864,12 @@ public:
 	 * @param serviceId Service handle Id
 	 * @param charId Characteristic id
 	 */
-	virtual void characteristicValueReadRequested(uint32_t requestId, const std::string &address, uint16_t serviceId, uint16_t charId) { }
-	virtual void characteristicValueReadRequested(uint32_t requestId, const std::string &address, uint16_t serviceId, uint16_t charId, int offset, bool is_long) {}
-	virtual void characteristicValueWriteRequested(uint32_t requestId, const std::string &address, uint16_t serviceId, uint16_t charId,
-				const BluetoothGattValue &value, bool response = true) { }
-	virtual void characteristicValueWriteRequested(uint32_t requestId, const std::string &address, uint16_t serviceId, uint16_t charId,
-						       const BluetoothGattValue &value, ContinueType contType, bool response = true) { }
+	virtual void characteristicValueReadRequested(uint32_t /*requestId*/, const std::string &/*address*/, uint16_t /*serviceId*/, uint16_t /*charId*/) { }
+	virtual void characteristicValueReadRequested(uint32_t /*requestId*/, const std::string &/*address*/, uint16_t /*serviceId*/, uint16_t /*charId*/, int /*offset*/, bool /*is_long*/) {}
+	virtual void characteristicValueWriteRequested(uint32_t /*requestId*/, const std::string &/*address*/, uint16_t /*serviceId*/, uint16_t /*charId*/,
+				const BluetoothGattValue &/*value*/, bool /*response*/ = true) { }
+	virtual void characteristicValueWriteRequested(uint32_t /*requestId*/, const std::string &/*address*/, uint16_t /*serviceId*/, uint16_t /*charId*/,
+						       const BluetoothGattValue &/*value*/, ContinueType /*contType*/, bool /*response*/ = true) { }
 };
 
 /**
@@ -919,7 +920,7 @@ public:
 	 * @param appUuid application Uuid
 	 * @param type type of application
 	 */
-	virtual uint16_t addApplication(const BluetoothUuid &appUuid, ApplicationType type) { return addApplication(appUuid); }
+	virtual uint16_t addApplication(const BluetoothUuid &appUuid, ApplicationType /*type*/) { return addApplication(appUuid); }
 
 	/**
 	 * @brief remove application for services.
@@ -927,21 +928,21 @@ public:
 	 * @param appId Application handle Id
 	 * @param type type of application
 	 */
-	virtual bool removeApplication(uint16_t appId, ApplicationType type) { return false; }
+	virtual bool removeApplication(uint16_t /*appId*/, ApplicationType /*type*/) { return false; }
 
 	/**
 	 * @brief add application for services.
 	 *
 	 * @param appUuid application Uuid
 	 */
-	virtual uint16_t addApplication(const BluetoothUuid &appUuid) { return -1; }
+	virtual uint16_t addApplication(const BluetoothUuid &/*appUuid*/) { return -1; }
 
 	/**
 	 * @brief remove application for services.
 	 *
 	 * @param appId Application handle Id
 	 */
-	virtual bool removeApplication(uint16_t appId) { return false; }
+	virtual bool removeApplication(uint16_t /*appId*/) { return false; }
 
 	/**
 	* @brief Add a new service to the stack
@@ -954,7 +955,7 @@ public:
 	* @param callback Callback function which is called when the operation is done or
 	*		has failed.
 	*/
-	virtual void addService(uint16_t appId, const BluetoothGattService &service, BluetoothGattAddCallback callback)
+	virtual void addService(uint16_t /*appId*/, const BluetoothGattService &/*service*/, BluetoothGattAddCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED, 0);
 	}
@@ -967,7 +968,7 @@ public:
 	* @param callback Callback function which is called when the operation is done or
 	*		has failed.
 	*/
-	virtual void removeService(uint16_t appId, const BluetoothGattService &service, BluetoothResultCallback callback)
+	virtual void removeService(uint16_t /*appId*/, const BluetoothGattService &/*service*/, BluetoothResultCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED);
 	}
@@ -980,7 +981,7 @@ public:
 	* @param callback Callback function which is called when the operation is done or
 	*		has failed.
 	*/
-	virtual void removeService(uint16_t appId, uint16_t serviceId, BluetoothResultCallback callback)
+	virtual void removeService(uint16_t /*appId*/, uint16_t /*serviceId*/, BluetoothResultCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED);
 	}
@@ -994,7 +995,7 @@ public:
 	* @param callback Callback function which is called when the operation is done or
 	*		has failed.
 	*/
-	virtual void addCharacteristic(uint16_t appId, uint16_t serviceId, const BluetoothGattCharacteristic &characteristic, BluetoothGattAddCallback callback)
+	virtual void addCharacteristic(uint16_t /*appId*/, uint16_t /*serviceId*/, const BluetoothGattCharacteristic &/*characteristic*/, BluetoothGattAddCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED, 0);
 	}
@@ -1009,7 +1010,7 @@ public:
 	* @param callback Callback function which is called when the operation is done or
 	*		has failed.
 	*/
-	virtual void addDescriptor(uint16_t appId, uint16_t serviceId, const BluetoothGattDescriptor &descriptor, BluetoothGattAddCallback callback)
+	virtual void addDescriptor(uint16_t /*appId*/, uint16_t /*serviceId*/, const BluetoothGattDescriptor &/*descriptor*/, BluetoothGattAddCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED, 0);
 	}
@@ -1024,7 +1025,7 @@ public:
 	* @param callback Callback function which is called when the operation is done or
 	*		has failed.
 	*/
-	virtual void addCharacteristic(uint16_t serviceId, const BluetoothGattCharacteristic &characteristic, BluetoothGattAddCallback callback)
+	virtual void addCharacteristic(uint16_t /*serviceId*/, const BluetoothGattCharacteristic &/*characteristic*/, BluetoothGattAddCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED, 0);
 	}
@@ -1036,7 +1037,7 @@ public:
 	* @param descriptor new descriptor to store.
 	* @param callback Callback function which is called when the operation is done or
 	*		has failed. */
-	virtual void addDescriptor(uint16_t serviceId, const BluetoothGattDescriptor &descriptor, BluetoothGattAddCallback callback)
+	virtual void addDescriptor(uint16_t /*serviceId*/, const BluetoothGattDescriptor &/*descriptor*/, BluetoothGattAddCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED, 0);
 	}
@@ -1051,7 +1052,7 @@ public:
 	* @param callback Callback function which is called when the operation is done or
 	*		has failed.
 	*/
-	virtual void startService(uint16_t appId, uint16_t serviceId, BluetoothGattTransportMode mode, BluetoothResultCallback callback)
+	virtual void startService(uint16_t /*appId*/, uint16_t /*serviceId*/, BluetoothGattTransportMode /*mode*/, BluetoothResultCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED);
 	}
@@ -1065,7 +1066,7 @@ public:
 	* @param callback Callback function which is called when the operation is done or
 	*		has failed.
 	*/
-	virtual void startService(uint16_t serviceId, BluetoothGattTransportMode mode, BluetoothResultCallback callback)
+	virtual void startService(uint16_t /*serviceId*/, BluetoothGattTransportMode /*mode*/, BluetoothResultCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED);
 	}
@@ -1086,7 +1087,7 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void changeCharacteristicWatchStatus(const std::string &address, const uint16_t &appId, const uint16_t &handle, bool enabled,
+	virtual void changeCharacteristicWatchStatus(const std::string &/*address*/, const uint16_t &/*appId*/, const uint16_t &/*handle*/, bool /*enabled*/,
 												 BluetoothResultCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED);
@@ -1100,7 +1101,7 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void readCharacteristic(const uint16_t &connId, const uint16_t &characteristicHandle,
+	virtual void readCharacteristic(const uint16_t &/*connId*/, const uint16_t &/*characteristicHandle*/,
 									 BluetoothGattReadCharacteristicCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED, BluetoothGattCharacteristic());
@@ -1114,7 +1115,7 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void readCharacteristics(const uint16_t &connId, const std::vector<uint16_t> &characteristicHandles,
+	virtual void readCharacteristics(const uint16_t &/*connId*/, const std::vector<uint16_t> &/*characteristicHandles*/,
 									 BluetoothGattReadCharacteristicsCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED, BluetoothGattCharacteristicList());
@@ -1131,7 +1132,7 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void writeCharacteristic(const uint16_t &connId, const BluetoothGattCharacteristic &characteristic,
+	virtual void writeCharacteristic(const uint16_t &/*connId*/, const BluetoothGattCharacteristic &/*characteristic*/,
 									 BluetoothResultCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED);
@@ -1145,7 +1146,7 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void readDescriptor(const uint16_t &connId, const uint16_t &descriptorHandle,
+	virtual void readDescriptor(const uint16_t &/*connId*/, const uint16_t &/*descriptorHandle*/,
 								 BluetoothGattReadDescriptorCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED, BluetoothGattDescriptor());
@@ -1159,7 +1160,7 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void readDescriptors(const uint16_t &connId, const std::vector<uint16_t> &descriptorHandles,
+	virtual void readDescriptors(const uint16_t &/*connId*/, const std::vector<uint16_t> &/*descriptorHandles*/,
 								 BluetoothGattReadDescriptorsCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED, BluetoothGattDescriptorList());
@@ -1175,7 +1176,7 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void writeDescriptor(const uint16_t &connId, const BluetoothGattDescriptor &descriptor,
+	virtual void writeDescriptor(const uint16_t &/*connId*/, const BluetoothGattDescriptor &/*descriptor*/,
 								 BluetoothResultCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED);
@@ -1198,8 +1199,8 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void changeCharacteristicWatchStatus(const std::string &address, const uint16_t &appId, const BluetoothUuid &service,
-												 const BluetoothUuid &characteristic, bool enabled,
+	virtual void changeCharacteristicWatchStatus(const std::string &/*address*/, const uint16_t &/*appId*/, const BluetoothUuid &/*service*/,
+												 const BluetoothUuid &/*characteristic*/, bool /*enabled*/,
 												 BluetoothResultCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED);
@@ -1214,8 +1215,8 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void readCharacteristic(const uint16_t &connId, const BluetoothUuid& service,
-									 const BluetoothUuid &characteristics,
+	virtual void readCharacteristic(const uint16_t &/*connId*/, const BluetoothUuid& /*service*/,
+									 const BluetoothUuid &/*characteristics*/,
 									 BluetoothGattReadCharacteristicCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED, BluetoothGattCharacteristic());
@@ -1230,8 +1231,8 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void readCharacteristics(const uint16_t &connId, const BluetoothUuid& service,
-									 const BluetoothUuidList &characteristics,
+	virtual void readCharacteristics(const uint16_t &/*connId*/, const BluetoothUuid& /*service*/,
+									 const BluetoothUuidList &/*characteristics*/,
 									 BluetoothGattReadCharacteristicsCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED, BluetoothGattCharacteristicList());
@@ -1249,8 +1250,8 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void writeCharacteristic(const uint16_t &connId, const BluetoothUuid& service,
-									 const BluetoothGattCharacteristic &characteristic,
+	virtual void writeCharacteristic(const uint16_t &/*connId*/, const BluetoothUuid& /*service*/,
+									 const BluetoothGattCharacteristic &/*characteristic*/,
 									 BluetoothResultCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED);
@@ -1266,8 +1267,8 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void readDescriptor(const uint16_t &connId, const BluetoothUuid& service, const BluetoothUuid &characteristic,
-								 const BluetoothUuid &descriptor, BluetoothGattReadDescriptorCallback callback)
+	virtual void readDescriptor(const uint16_t &/*connId*/, const BluetoothUuid& /*service*/, const BluetoothUuid &/*characteristic*/,
+								 const BluetoothUuid &/*descriptor*/, BluetoothGattReadDescriptorCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED, BluetoothGattDescriptor());
 	}
@@ -1281,8 +1282,8 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void readDescriptors(const uint16_t &connId, const BluetoothUuid& service, const BluetoothUuid &characteristic,
-								 const BluetoothUuidList &descriptors, BluetoothGattReadDescriptorsCallback callback)
+	virtual void readDescriptors(const uint16_t &/*connId*/, const BluetoothUuid& /*service*/, const BluetoothUuid &/*characteristic*/,
+								 const BluetoothUuidList &/*descriptors*/, BluetoothGattReadDescriptorsCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED, BluetoothGattDescriptorList());
 	}
@@ -1299,8 +1300,8 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void writeDescriptor(const uint16_t &connId, const BluetoothUuid &service, const BluetoothUuid &characteristic,
-								 const BluetoothGattDescriptor &descriptor, BluetoothResultCallback callback)
+	virtual void writeDescriptor(const uint16_t &/*connId*/, const BluetoothUuid &/*service*/, const BluetoothUuid &/*characteristic*/,
+								 const BluetoothGattDescriptor &/*descriptor*/, BluetoothResultCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED);
 	}
@@ -1320,7 +1321,7 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void changeCharacteristicWatchStatus(const std::string &address, const uint16_t handle, bool enabled,
+	virtual void changeCharacteristicWatchStatus(const std::string &/*address*/, const uint16_t /*handle*/, bool /*enabled*/,
 	                                             BluetoothResultCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED);
@@ -1334,7 +1335,7 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void readCharacteristic(const std::string &address, const uint16_t &characteristicHandle,
+	virtual void readCharacteristic(const std::string &/*address*/, const uint16_t &/*characteristicHandle*/,
 									 BluetoothGattReadCharacteristicCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED, BluetoothGattCharacteristic());
@@ -1348,7 +1349,7 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void readCharacteristics(const std::string &address, const std::vector<uint16_t> &characteristicHandles,
+	virtual void readCharacteristics(const std::string &/*address*/, const std::vector<uint16_t> &/*characteristicHandles*/,
 									 BluetoothGattReadCharacteristicsCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED, BluetoothGattCharacteristicList());
@@ -1365,7 +1366,7 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void writeCharacteristic(const std::string &address, const BluetoothGattCharacteristic &characteristic,
+	virtual void writeCharacteristic(const std::string &/*address*/, const BluetoothGattCharacteristic &/*characteristic*/,
 									 BluetoothResultCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED);
@@ -1379,7 +1380,7 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void readDescriptor(const std::string &address, const uint16_t &descriptorHandle,
+	virtual void readDescriptor(const std::string &/*address*/, const uint16_t &/*descriptorHandle*/,
 								 BluetoothGattReadDescriptorCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED, BluetoothGattDescriptor());
@@ -1393,7 +1394,7 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void readDescriptors(const std::string &address, const std::vector<uint16_t> &descriptorHandles,
+	virtual void readDescriptors(const std::string &/*address*/, const std::vector<uint16_t> &/*descriptorHandles*/,
 								 BluetoothGattReadDescriptorsCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED, BluetoothGattDescriptorList());
@@ -1409,7 +1410,7 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void writeDescriptor(const std::string &address, const BluetoothGattDescriptor &descriptor,
+	virtual void writeDescriptor(const std::string &/*address*/, const BluetoothGattDescriptor &/*descriptor*/,
 								 BluetoothResultCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED);
@@ -1444,8 +1445,8 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void readCharacteristic(const std::string &address, const BluetoothUuid& service,
-									 const BluetoothUuid &characteristic,
+	virtual void readCharacteristic(const std::string &/*address*/, const BluetoothUuid& /*service*/,
+									 const BluetoothUuid &/*characteristic*/,
 									 BluetoothGattReadCharacteristicCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED, BluetoothGattCharacteristic());
@@ -1490,8 +1491,8 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void readDescriptor(const std::string &address, const BluetoothUuid& service, const BluetoothUuid &characteristic,
-								 const BluetoothUuid &descriptor, BluetoothGattReadDescriptorCallback callback)
+	virtual void readDescriptor(const std::string &/*address*/, const BluetoothUuid& /*service*/, const BluetoothUuid &/*characteristic*/,
+								 const BluetoothUuid &/*descriptor*/, BluetoothGattReadDescriptorCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED, BluetoothGattDescriptor());
 	}
@@ -1559,7 +1560,7 @@ public:
 	* @param id request Id
 	* @param value read value
 	*/
-	virtual void characteristicValueReadResponse(uint32_t requestId, BluetoothError error, const BluetoothGattValue &value) {}
+	virtual void characteristicValueReadResponse(uint32_t /*requestId*/, BluetoothError /*error*/, const BluetoothGattValue &/*value*/) {}
 	/*
 	*
 	* @brief characteristic value write response to stack
@@ -1567,14 +1568,14 @@ public:
 	* @param id request Id
 	* @param value write value
 	*/
-	virtual void characteristicValueWriteResponse(uint32_t requestId, BluetoothError error, const BluetoothGattValue &value) {}
+	virtual void characteristicValueWriteResponse(uint32_t /*requestId*/, BluetoothError /*error*/, const BluetoothGattValue &/*value*/) {}
 	/*
 	*
 	* @brief characteristic value write response to stack
 	*
 	* @param characteristic changed characteristic value
 	*/
-	virtual void notifyCharacteristicValueChanged(BluetoothGattCharacteristic characteristic)
+	virtual void notifyCharacteristicValueChanged(BluetoothGattCharacteristic /*characteristic*/)
 	{
 		return;
 	}
@@ -1586,7 +1587,7 @@ public:
 	* @param characteristic changed characteristic value
 	* @param charId changed characteristic handle id
 	*/
-	virtual void notifyCharacteristicValueChanged(uint32_t serviceId, BluetoothGattCharacteristic characteristic, uint16_t charId) { }
+	virtual void notifyCharacteristicValueChanged(uint32_t /*serviceId*/, BluetoothGattCharacteristic /*characteristic*/, uint16_t /*charId*/) { }
 
 	/*
 	*
@@ -1596,7 +1597,7 @@ public:
 	* @param characteristic changed characteristic value
 	* @param charId changed characteristic handle id
 	*/
-	virtual void notifyCharacteristicValueChanged(uint16_t serverId, uint16_t serviceId, BluetoothGattCharacteristic characteristic, uint16_t charId) { }
+	virtual void notifyCharacteristicValueChanged(uint16_t /*serverId*/, uint16_t /*serviceId*/, BluetoothGattCharacteristic /*characteristic*/, uint16_t /*charId*/) { }
 
 	/*
 	*
@@ -1607,14 +1608,14 @@ public:
 	* @param descriptor changed descriptor value
 	* @param charId changed characteristic handle id
 	*/
-	virtual void notifyDescriptorValueChanged(uint16_t serverId, uint16_t serviceId, uint16_t descId, BluetoothGattDescriptor descriptor, uint16_t charId) { }
+	virtual void notifyDescriptorValueChanged(uint16_t /*serverId*/, uint16_t /*serviceId*/, uint16_t /*descId*/, BluetoothGattDescriptor /*descriptor*/, uint16_t /*charId*/) { }
 
 	/**
 	* @brief Get connectId of the specific remote device.
 	*
 	* @param address Address of the device to connect to.
 	*/
-	virtual uint16_t getConnectId(const std::string &address)
+	virtual uint16_t getConnectId(const std::string &/*address*/)
 	{
 		return 0;
 	}
@@ -1624,7 +1625,7 @@ public:
 	*
 	* @param address Address of the device to connect to.
 	*/
-	virtual uint16_t getAppId(const std::string &address)
+	virtual uint16_t getAppId(const std::string &/*address*/)
 	{
 		return 0;
 	}
@@ -1639,7 +1640,7 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void connectGatt(const uint16_t &appId, bool autoConnection, const std::string &address, BluetoothConnectCallback callback)
+	virtual void connectGatt(const uint16_t &/*appId*/, bool /*autoConnection*/, const std::string &/*address*/, BluetoothConnectCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED, 0);
 	}
@@ -1656,7 +1657,7 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void disconnectGatt(const uint16_t &appId, const uint16_t &connectId, const std::string &address, BluetoothResultCallback callback)
+	virtual void disconnectGatt(const uint16_t &/*appId*/, const uint16_t &/*connectId*/, const std::string &/*address*/, BluetoothResultCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED);
 	}

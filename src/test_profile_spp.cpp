@@ -28,7 +28,10 @@ BluetoothSppChannelId channelId;
 class TestSppObserver : public BluetoothSppStatusObserver
 {
 public:
-	virtual void channelStateChanged(const std::string &address, const std::string &uuid, const BluetoothSppChannelId channelId, const bool state) {}
+	virtual ~TestSppObserver() {}
+
+	// With the adapter address, as the API declares it: without it this overrode nothing and was never called.
+	void channelStateChanged(const std::string &/*adapterAddress*/, const std::string &/*address*/, const std::string &/*uuid*/, const BluetoothSppChannelId /*channelId*/, const bool /*state*/) override {}
 };
 
 static TestSppObserver *sppProfileObserver;
@@ -39,7 +42,7 @@ static guint gIdleSource = 0;
 static guint gTimeoutSource = 0;
 BluetoothSppProfile *sppProfile;
 
-static gboolean check_spp_timeout(gpointer user_data)
+static gboolean check_spp_timeout(gpointer /*user_data*/)
 {
 	g_assert_not_reached();
 	clear_source(&gSource);
@@ -50,7 +53,7 @@ static gboolean check_spp_timeout(gpointer user_data)
 	return FALSE;
 }
 
-static gboolean check_adapter_initialized(gpointer user_data)
+static gboolean check_adapter_initialized(gpointer /*user_data*/)
 {
 	clear_source(&gTimeoutSource);
 	g_main_loop_quit(mainLoop);
@@ -58,7 +61,7 @@ static gboolean check_adapter_initialized(gpointer user_data)
 	return FALSE;
 }
 
-static gboolean check_spp_connect(gpointer user_data)
+static gboolean check_spp_connect(gpointer /*user_data*/)
 {
 	clear_source(&gTimeoutSource);
 	g_main_loop_quit(mainLoop);
@@ -83,7 +86,7 @@ static gboolean spp_profile_disconnect_callback(BluetoothError error)
 	return FALSE;
 }
 
-static gboolean spp_profile_channelState_callback(BluetoothError error, const bool state)
+static gboolean spp_profile_channelState_callback(BluetoothError error, const bool /*state*/)
 {
 	g_assert_equal(error, BLUETOOTH_ERROR_NONE);
 	DEBUG_MSG("The Channel State has been changed "<< state);
@@ -101,7 +104,7 @@ static gboolean spp_write_callback(BluetoothError error)
 	return FALSE;
 }
 
-static gboolean setup_sppGetChannelState(gpointer user_data)
+static gboolean setup_sppGetChannelState(gpointer /*user_data*/)
 {
 	sppProfile->getChannelState(btPairingPartnerAddr, "10001101-0000-1000-8000-00805f9b34fb", spp_profile_channelState_callback);
 	gTimeoutSource = g_timeout_add(20000, check_spp_timeout, (void *)NULL);
@@ -109,7 +112,7 @@ static gboolean setup_sppGetChannelState(gpointer user_data)
 	return FALSE;
 }
 
-static gboolean initialize_spp(gpointer user_data)
+static gboolean initialize_spp(gpointer /*user_data*/)
 {
 	clear_source(&gTimeoutSource);
 	g_assert_nonnull(defaultAdapter);
@@ -142,7 +145,7 @@ static gboolean initialize_spp(gpointer user_data)
 	return FALSE;
 }
 
-static gboolean setup_test_spp_initialize(gpointer user_data)
+static gboolean setup_test_spp_initialize(gpointer /*user_data*/)
 {
 	clear_source(&gIdleSource);
 	gTimeoutSource = g_timeout_add(15000, initialize_spp, (void *)NULL);
@@ -156,7 +159,7 @@ static void test_sppInitialize(void)
 	g_main_loop_run(mainLoop);
 }
 
-static gboolean setup_sppCreateChannel(gpointer user_data)
+static gboolean setup_sppCreateChannel(gpointer /*user_data*/)
 {
 	BluetoothError error = sppProfile->createChannel("SPP_CHANNEL", "10001101-0000-1000-8000-00805f9b34fb");
 
@@ -166,7 +169,7 @@ static gboolean setup_sppCreateChannel(gpointer user_data)
 	return FALSE;
 }
 
-static gboolean setup_sppConnectUuid(gpointer user_data)
+static gboolean setup_sppConnectUuid(gpointer /*user_data*/)
 {
 	sppProfileObserver = new TestSppObserver();
 	g_assert_nonnull(sppProfileObserver);
@@ -181,7 +184,7 @@ static gboolean setup_sppConnectUuid(gpointer user_data)
 	return FALSE;
 }
 
-static gboolean setup_sppRemovalUuid(gpointer user_data)
+static gboolean setup_sppRemovalUuid(gpointer /*user_data*/)
 {
 	sppProfile->removeChannel("10001101-0000-1000-8000-00805f9b34fb");
 	g_main_loop_quit(mainLoop);
@@ -189,7 +192,7 @@ static gboolean setup_sppRemovalUuid(gpointer user_data)
 	return FALSE;
 }
 
-static gboolean setup_sppDisconnectUuid(gpointer user_data)
+static gboolean setup_sppDisconnectUuid(gpointer /*user_data*/)
 {
 	sppProfile->disconnectUuid(channelId, spp_profile_disconnect_callback);
 	gTimeoutSource = g_timeout_add(10000, check_spp_timeout, (void *)NULL);
@@ -197,7 +200,7 @@ static gboolean setup_sppDisconnectUuid(gpointer user_data)
 	return FALSE;
 }
 
-static gboolean setup_sppWriteData(gpointer user_data)
+static gboolean setup_sppWriteData(gpointer /*user_data*/)
 {
 
 	unsigned char recievedData[] = {10, 110, 0, 5, 93, 4, 100, 30};

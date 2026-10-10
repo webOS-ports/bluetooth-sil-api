@@ -78,6 +78,8 @@ public:
 	{
 	}
 
+	BluetoothHfpAtCommand &operator=(const BluetoothHfpAtCommand &other) = default;
+
 	/**
 	 * @brief Returns the type of AT command.
 	 *
@@ -139,7 +141,7 @@ public:
 	 * @param address Address of the device
 	 * @param state Current SCO connection state between local and the remote device
 	 */
-	virtual void scoStateChanged(const std::string &address, bool state) { }
+	virtual void scoStateChanged(const std::string &/*address*/, bool /*state*/) { }
 
 	/**
 	 * The method is called when a local device(AG) receives AT commands from a remote device(HF).
@@ -147,7 +149,7 @@ public:
 	 * @param address Address of the device
 	 * @param atCommand Bluetooth AT command which is sent from a remote device(HF)
 	 */
-	virtual void atCommandReceived(const std::string &address, const BluetoothHfpAtCommand &atCommand) { }
+	virtual void atCommandReceived(const std::string &/*address*/, const BluetoothHfpAtCommand &/*atCommand*/) { }
 
 	/**
 	 * The method is called when a local device(HF) receives result codes from a remote device(AG).
@@ -155,7 +157,7 @@ public:
 	 * @param address Address of the device
 	 * @param resultCode Result code which is sent from a remote device(AG)
 	 */
-	virtual void resultCodeReceived(const std::string &address, const std::string &resultCode) { }
+	virtual void resultCodeReceived(const std::string &/*address*/, const std::string &/*resultCode*/) { }
 };
 
 /**

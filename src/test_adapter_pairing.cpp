@@ -100,7 +100,7 @@ static void get_device_address(const BluetoothPropertiesList &properties)
 	g_assert_notequal(discovered_device_address.length(), 0);
 }
 
-static void unpair_result_ignore_cb(BluetoothError error)
+static void unpair_result_ignore_cb(BluetoothError /*error*/)
 {
 	DEBUG_MSG("Inside unpair_result_ignore_cb, error is " << error << "; (ignoring error)");
 	//g_assert_true(BLUETOOTH_ERROR_NONE == error);
@@ -148,7 +148,8 @@ static gboolean check_pairing_state_change(gpointer user_data)
 
 		// return TRUE or FALSE for user confirmation as instructed by test
 		DEBUG_MSG("Inside check_pairing_state_change, calling supplyPairingConfirmation with " << (testPairData->expectSuccess ? "TRUE" : "FALSE"));
-		BluetoothError error = defaultAdapter->supplyPairingConfirmation(observer->pairingDeviceAddress, testPairData->expectSuccess /*accept*/);
+		// The result is not checked: only the observer's state is (see the test data).
+		static_cast<void>(defaultAdapter->supplyPairingConfirmation(observer->pairingDeviceAddress, testPairData->expectSuccess /*accept*/));
 		return FALSE;
 	}
 	else if (observer->pairingDisplaySecretRequested)
@@ -193,13 +194,13 @@ static gboolean check_pairing_state_change(gpointer user_data)
 		{
 			DEBUG_MSG("Inside check_pairing_state_change, calling supplyPairingSecret with pin: " << testPairData->pin);
 			// TODO: This will presumably FAIL for non-MOCK SIL (so expect that):
-			BluetoothError error = defaultAdapter->supplyPairingSecret(testPairData->address, testPairData->pin);
+			static_cast<void>(defaultAdapter->supplyPairingSecret(testPairData->address, testPairData->pin));
 		}
 		else
 		{
 			DEBUG_MSG("Inside check_pairing_state_change, calling supplyPairingSecret with passkey: " << testPairData->passkey);
 			// TODO: This will presumably FAIL for non-MOCK SIL (so expect that):
-			BluetoothError error = defaultAdapter->supplyPairingSecret(testPairData->address, testPairData->passkey);
+			static_cast<void>(defaultAdapter->supplyPairingSecret(testPairData->address, testPairData->passkey));
 		}
 		return FALSE;
 	}
@@ -210,7 +211,7 @@ static gboolean check_pairing_state_change(gpointer user_data)
 	}
 }
 
-static gboolean check_pairing_timeout(gpointer user_data)
+static gboolean check_pairing_timeout(gpointer /*user_data*/)
 {
 	// this is the overall timeout that should only fire if (e.g.) check_pairing_state_change never succeeds
 	DEBUG_MSG("Inside check_pairing_timeout which means a test did not succeed within the timeout period.");
@@ -254,7 +255,7 @@ void get_discovered_device_uuids_cb(BluetoothError error,
 	g_assert_notequal(num_device_uuids, 0);
 }
 
-static gboolean check_device_discovered(gpointer user_data)
+static gboolean check_device_discovered(gpointer /*user_data*/)
 {
 	g_assert_nonnull(observer);
 
@@ -282,7 +283,7 @@ static gboolean check_device_discovered(gpointer user_data)
 	return TRUE;
 }
 
-static gboolean check_discovery_timeout(gpointer user_data)
+static gboolean check_discovery_timeout(gpointer /*user_data*/)
 {
 	// this is the overall timeout that should only fire if (e.g.) check_discovery_state_change never succeeds
 	g_assert_not_reached();
@@ -319,7 +320,7 @@ static gboolean setup_test_incoming_pair(gpointer user_data)
 	return FALSE;
 }
 
-static void test_incoming_pair(Fixture *fixture, gconstpointer tdata)
+static void test_incoming_pair(Fixture */*fixture*/, gconstpointer tdata)
 {
 	gIdleSource = g_idle_add(setup_test_incoming_pair, (gpointer) tdata);
 	g_main_loop_run(mainLoop);
@@ -368,7 +369,7 @@ static gboolean setup_test_outgoing_pair(gpointer user_data)
 	return true;
 }
 
-static void test_outgoing_pair(Fixture *fixture, gconstpointer tdata)
+static void test_outgoing_pair(Fixture */*fixture*/, gconstpointer tdata)
 {
 	gIdleSource = g_idle_add(setup_test_outgoing_pair, (gpointer) tdata);
 	g_main_loop_run(mainLoop);
@@ -379,7 +380,7 @@ static void set_property_cb(BluetoothError error)
 	g_assert_true(BLUETOOTH_ERROR_NONE == error);
 }
 
-static gboolean setup_test_get_device_uuids(gpointer user_data)
+static gboolean setup_test_get_device_uuids(gpointer /*user_data*/)
 {
 	DEBUG_MSG("");
 	clear_source(&gIdleSource);
@@ -398,14 +399,14 @@ static gboolean setup_test_get_device_uuids(gpointer user_data)
 	return FALSE;
 }
 
-static void test_get_device_uuids(Fixture *fixture, gconstpointer tdata)
+static void test_get_device_uuids(Fixture */*fixture*/, gconstpointer tdata)
 {
 	gIdleSource = g_idle_add(setup_test_get_device_uuids, (gpointer) tdata);
 	g_main_loop_run(mainLoop);
 }
 
 // Setup for a test
-static void fsetup(Fixture *fixture, gconstpointer unused)
+static void fsetup(Fixture */*fixture*/, gconstpointer /*unused*/)
 {
 	DEBUG_MSG("");
 	g_assert_nonnull(defaultAdapter);
@@ -416,7 +417,7 @@ static void fsetup(Fixture *fixture, gconstpointer unused)
 }
 
 // Tear down after a test
-static void fteardown(Fixture *fixture, gconstpointer tdata)
+static void fteardown(Fixture */*fixture*/, gconstpointer tdata)
 {
 	defaultAdapter->registerObserver(NULL);
 	delete observer;

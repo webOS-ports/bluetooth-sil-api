@@ -86,6 +86,8 @@ public:
 	 */
 	BluetoothUuid(const BluetoothUuid &other) : uuid(other.uuid), type(other.type) { }
 
+	BluetoothUuid &operator=(const BluetoothUuid &other) = default;
+
 	/**
 	 * @brief Operator implementation to support UUID comparison
 	 * @param rhs Right-hand side object to compare

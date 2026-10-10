@@ -284,6 +284,8 @@ public:
 	{
 	}
 
+	BluetoothProperty &operator=(const BluetoothProperty &other) = default;
+
 	/**
 	 * @brief Initialize the property with a type and a value
 	 * @param type Type of the property

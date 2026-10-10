@@ -195,6 +195,8 @@ public:
 	{
 	}
 
+	BluetoothLeServiceUuid &operator=(const BluetoothLeServiceUuid &other) = default;
+
 	/**
 	 * @brief Retrieve the UUID of the service
 	 * @return uuid UUID of the service
@@ -252,6 +254,8 @@ public:
 		mask(other.getMask())
 	{
 	}
+
+	BluetoothLeServiceData &operator=(const BluetoothLeServiceData &other) = default;
 
 	/**
 	 * @brief Retrieve the UUID of the service data
@@ -324,6 +328,8 @@ public:
 		mask(other.getMask())
 	{
 	}
+
+	BluetoothManufacturerData &operator=(const BluetoothManufacturerData &other) = default;
 
 	/**
 	 * @brief Retrieve the ID of the manufacturer data
@@ -399,6 +405,8 @@ public:
 		advertisingType(other.getAdvType())
 	{
 	}
+
+	BluetoothLeDiscoveryFilter &operator=(const BluetoothLeDiscoveryFilter &other) = default;
 
 	/**
 	 * @brief Retrieve the device address
@@ -641,7 +649,7 @@ public:
 	 * @param code Inquiry access code for distinguishing giac/liac.
 	 * @return Possible error of the operation
 	 */
-	virtual BluetoothError startDiscovery(TransportType type, InquiryAccessCode code)
+	virtual BluetoothError startDiscovery(TransportType /*type*/, InquiryAccessCode /*code*/)
 	{
 		return BLUETOOTH_ERROR_UNSUPPORTED;
 	}
@@ -666,7 +674,7 @@ public:
 	 *
 	 * @return Unique ID of BLE discovery filter. 1 and over.
 	 */
-	virtual int32_t addLeDiscoveryFilter(const BluetoothLeDiscoveryFilter &filter)
+	virtual int32_t addLeDiscoveryFilter(const BluetoothLeDiscoveryFilter &/*filter*/)
 	{
 		return -1;
 	}
@@ -678,7 +686,7 @@ public:
 	 *
 	 * @return Possible error of the operation
 	 */
-	virtual BluetoothError removeLeDiscoveryFilter(uint32_t scanId)
+	virtual BluetoothError removeLeDiscoveryFilter(uint32_t /*scanId*/)
 	{
 		return BLUETOOTH_ERROR_UNSUPPORTED;
 	}
@@ -689,7 +697,7 @@ public:
 	 * @param filter LE discovery filter
 	 * @param scanId Unique ID of BLE discovery filter
 	 */
-	virtual void matchLeDiscoveryFilterDevices(const BluetoothLeDiscoveryFilter &filter, uint32_t scanId) { }
+	virtual void matchLeDiscoveryFilterDevices(const BluetoothLeDiscoveryFilter &/*filter*/, uint32_t /*scanId*/) { }
 
 	/**
 	 * @brief Start the LE discovery of devices
@@ -738,7 +746,7 @@ public:
 	 *
 	 * @return Possible error of the operation
 	 */
-	virtual BluetoothError startLeDiscovery(uint32_t scanId, BluetoothBleDiscoveryUuidFilterList uuids)
+	virtual BluetoothError startLeDiscovery(uint32_t /*scanId*/, BluetoothBleDiscoveryUuidFilterList /*uuids*/)
 	{
 		return BLUETOOTH_ERROR_UNSUPPORTED;
 	}
@@ -758,7 +766,7 @@ public:
 	 *
 	 * @return Possible error of the operation
 	 */
-	virtual BluetoothError cancelLeDiscovery(uint32_t scanId)
+	virtual BluetoothError cancelLeDiscovery(uint32_t /*scanId*/)
 	{
 		return BLUETOOTH_ERROR_UNSUPPORTED;
 	}
@@ -817,7 +825,7 @@ public:
 	 * @param timeout The amount of time to wait before the sleep state within the sniff interval
 	 * @return Possible error of the operation
 	 */
-	virtual BluetoothError startSniff(const std::string &address, int minInterval, int maxInterval, int attempt, int timeout)
+	virtual BluetoothError startSniff(const std::string &/*address*/, int /*minInterval*/, int /*maxInterval*/, int /*attempt*/, int /*timeout*/)
 	{
 		return BLUETOOTH_ERROR_UNSUPPORTED;
 	}
@@ -828,7 +836,7 @@ public:
 	 * @param address Address of the device to stop sniff
 	 * @return Possible error of the operation
 	 */
-	virtual BluetoothError stopSniff(const std::string &address)
+	virtual BluetoothError stopSniff(const std::string &/*address*/)
 	{
 		return BLUETOOTH_ERROR_UNSUPPORTED;
 	}
@@ -840,7 +848,7 @@ public:
 	 * @param profileId Id of the profile to retrieve.
 	 * @return Instance of the profile if supported and available. Null otherwise.
 	 */
-	virtual BluetoothProfile *getProfile(const std::string& profileId)
+	virtual BluetoothProfile *getProfile(const std::string& /*profileId*/)
 	{
 		return 0;
 	}
@@ -936,14 +944,14 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void testRequestIncomingPair(const std::string &address, BluetoothResultCallback callback) { }
+	virtual void testRequestIncomingPair(const std::string &/*address*/, BluetoothResultCallback /*callback*/) { }
 
 	/**
 	 * @brief Will be deprecated
 	 */
-	virtual void configureAdvertisement(bool connectable, bool includeTxPower, bool includeName, BluetoothLowEnergyData manufacturerData,
-			                    BluetoothLowEnergyServiceList services, BluetoothResultCallback callback, uint8_t TxPower = 0,
-			                    BluetoothUuid solicitedService128 = BluetoothUuid("0"))
+	virtual void configureAdvertisement(bool /*connectable*/, bool /*includeTxPower*/, bool /*includeName*/, BluetoothLowEnergyData /*manufacturerData*/,
+			                    BluetoothLowEnergyServiceList /*services*/, BluetoothResultCallback callback, uint8_t /*TxPower*/ = 0,
+			                    BluetoothUuid /*solicitedService128*/ = BluetoothUuid("0"))
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED);
 	}
@@ -973,11 +981,11 @@ public:
 	 * @param TxPower 2's complement value of transmission power. This is an optional parameter.
 	 * @param solicitedService128 128-bit solicitation service uuid. This is an optional parameter.
 	 */
-	virtual void configureAdvertisement(bool connectable, bool includeTxPower, bool includeName, bool isScanResponse,
-			                    BluetoothLowEnergyData manufacturerData,
-			                    BluetoothLowEnergyServiceList services, ProprietaryDataList dataList,
-			                    BluetoothResultCallback callback, uint8_t TxPower = 0,
-			                    BluetoothUuid solicitedService128 = BluetoothUuid("0"))
+	virtual void configureAdvertisement(bool /*connectable*/, bool /*includeTxPower*/, bool /*includeName*/, bool /*isScanResponse*/,
+			                    BluetoothLowEnergyData /*manufacturerData*/,
+			                    BluetoothLowEnergyServiceList /*services*/, ProprietaryDataList /*dataList*/,
+			                    BluetoothResultCallback callback, uint8_t /*TxPower*/ = 0,
+			                    BluetoothUuid /*solicitedService128*/ = BluetoothUuid("0"))
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED);
 	}
@@ -990,7 +998,7 @@ public:
 	 * @param connectable True if advertisements can form a two way connection with a device,
 	 *        false otherwise.
 	 */
-	virtual bool configureAdvertisement(bool discoverable, bool connectable) { return false; }
+	virtual bool configureAdvertisement(bool /*discoverable*/, bool /*connectable*/) { return false; }
 
 	/**
 	 * @brief Start the BLE advertising.
@@ -1030,7 +1038,7 @@ public:
 	 * @param callback Callback function which is called when
 	 *        the operation is done or has failed.
 	 */
-	virtual void unregisterAdvertiser(uint8_t advertiserId, AdvertiserStatusCallback callback)
+	virtual void unregisterAdvertiser(uint8_t /*advertiserId*/, AdvertiserStatusCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED);
 	}
@@ -1043,7 +1051,7 @@ public:
 	 * @param callback Callback function which is called when
 	 *        the operation is done or has failed.
 	 */
-	virtual void setAdvertiserParameters(uint8_t advertiserId, AdvertiseSettings parameters, AdvertiserStatusCallback callback)
+	virtual void setAdvertiserParameters(uint8_t /*advertiserId*/, AdvertiseSettings /*parameters*/, AdvertiserStatusCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED);
 	}
@@ -1058,7 +1066,7 @@ public:
 	 * @param callback Callback function which is called when
 	 *        the operation is done or has failed.
 	 */
-	virtual void setAdvertiserData(uint8_t advertiserId, bool isScanResponse, AdvertiseData data, AdvertiserStatusCallback callback)
+	virtual void setAdvertiserData(uint8_t /*advertiserId*/, bool /*isScanResponse*/, AdvertiseData /*data*/, AdvertiserStatusCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED);
 	}
@@ -1071,7 +1079,7 @@ public:
 	 * @param callback Callback function which is called when
 	 *        the operation is done or has failed.
 	 */
-	virtual void enableAdvertiser(uint8_t advertiserId, int timeoutSeconds, AdvertiserStatusCallback callback)
+	virtual void enableAdvertiser(uint8_t /*advertiserId*/, int /*timeoutSeconds*/, AdvertiserStatusCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED);
 	}
@@ -1083,7 +1091,7 @@ public:
 	 * @param callback Callback function which is called when
 	 *        the operation is done or has failed.
 	 */
-	virtual void disableAdvertiser(uint8_t advertiserId, AdvertiserStatusCallback callback)
+	virtual void disableAdvertiser(uint8_t /*advertiserId*/, AdvertiserStatusCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED);
 	}
@@ -1098,8 +1106,8 @@ public:
 	 * @param callback Callback function which is called when
 	 *        the operation is done or has failed.
 	 */
-	virtual void startAdvertising(uint8_t advertiserId, const AdvertiseSettings &settings,
-			const AdvertiseData &advertiseData, const AdvertiseData &scanResponse, AdvertiserStatusCallback callback)
+	virtual void startAdvertising(uint8_t /*advertiserId*/, const AdvertiseSettings &/*settings*/,
+			const AdvertiseData &/*advertiseData*/, const AdvertiseData &/*scanResponse*/, AdvertiserStatusCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED);
 	}
@@ -1131,7 +1139,7 @@ public:
 	 * @param address Address of the device.
 	 * @param command Vendor specific command.
 	 */
-	virtual void sendVendorCommand(const std::string &address, uint32_t command) { }
+	virtual void sendVendorCommand(const std::string &/*address*/, uint32_t /*command*/) { }
 
 	/**
 	 * @brief Enalbe WoBLE of the Bluetooth adapter.
@@ -1153,7 +1161,7 @@ public:
 	 * @param isSuspend the power state is suspend or not.
 	 * @return Possible error of the operation
 	 */
-	virtual BluetoothError enableWoBle(bool isSuspend) { return BLUETOOTH_ERROR_UNSUPPORTED; }
+	virtual BluetoothError enableWoBle(bool /*isSuspend*/) { return BLUETOOTH_ERROR_UNSUPPORTED; }
 
 	/**
 	 * @brief Disable WoBLE of the Bluetooth adapter.
@@ -1161,7 +1169,7 @@ public:
 	 * @param isSuspend the power state is suspend or not.
 	 * @return Possible error of the operation
 	 */
-	virtual BluetoothError disableWoBle(bool isSuspend) { return BLUETOOTH_ERROR_UNSUPPORTED; }
+	virtual BluetoothError disableWoBle(bool /*isSuspend*/) { return BLUETOOTH_ERROR_UNSUPPORTED; }
 
 	/**
 	 * @brief Set the devices which trigger WoBLE.
@@ -1169,7 +1177,7 @@ public:
 	 * @param devices List of WoBLE triggering device's MAC address.
 	 * @return Possible error of the operation
 	 */
-	virtual BluetoothError setWoBleTriggerDevices(BluetoothWoBleTriggerDeviceList devices) { return BLUETOOTH_ERROR_UNSUPPORTED; }
+	virtual BluetoothError setWoBleTriggerDevices(BluetoothWoBleTriggerDeviceList /*devices*/) { return BLUETOOTH_ERROR_UNSUPPORTED; }
 
 	/**
 	 * @brief Send HCI commands
@@ -1180,7 +1188,7 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed. This handles HCI event packet.
 	 */
-	virtual void sendHciCommand(int16_t ogf, uint16_t ocf, BluetoothHCIParameterList parameters, BluetoothHCIEventCallback callback)
+	virtual void sendHciCommand(int16_t /*ogf*/, uint16_t /*ocf*/, BluetoothHCIParameterList /*parameters*/, BluetoothHCIEventCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED, 0, std::vector<uint16_t>());
 	}
@@ -1191,7 +1199,7 @@ public:
 	 * @param type Type of trace
 	 * @return Possible error of the operation
 	 */
-	virtual BluetoothError enableTrace(TraceType type) { return BLUETOOTH_ERROR_UNSUPPORTED; }
+	virtual BluetoothError enableTrace(TraceType /*type*/) { return BLUETOOTH_ERROR_UNSUPPORTED; }
 
 	/**
 	 * @brief Disable the trace of stack and snoop.
@@ -1199,7 +1207,7 @@ public:
 	 * @param type Type of trace
 	 * @return Possible error of the operation
 	 */
-	virtual BluetoothError disableTrace(TraceType type) { return BLUETOOTH_ERROR_UNSUPPORTED; }
+	virtual BluetoothError disableTrace(TraceType /*type*/) { return BLUETOOTH_ERROR_UNSUPPORTED; }
 
 	/**
 	 * @brief Set the stack trace level configuration.
@@ -1207,7 +1215,7 @@ public:
 	 * @param level Level of trace
 	 * @return Possible error of the operation
 	 */
-	virtual BluetoothError setStackTraceLevel(int level) { return BLUETOOTH_ERROR_UNSUPPORTED; }
+	virtual BluetoothError setStackTraceLevel(int /*level*/) { return BLUETOOTH_ERROR_UNSUPPORTED; }
 
 	/**
 	 * @brief Set the log path of stack or snoop.
@@ -1216,7 +1224,7 @@ public:
 	 * @param Path Path of log output file (i.e. full path with file name)
 	 * @return Possible error of the operation
 	 */
-	virtual BluetoothError setLogPath(TraceType type, const std::string &path) { return BLUETOOTH_ERROR_UNSUPPORTED; }
+	virtual BluetoothError setLogPath(TraceType /*type*/, const std::string &/*path*/) { return BLUETOOTH_ERROR_UNSUPPORTED; }
 
 	/**
 	 * @brief Set the log path of stack or snoop.
@@ -1224,7 +1232,7 @@ public:
 	 * @param isOverwirte True if there is a same file and file is overwritten, false otherwise
 	 * @return Possible error of the operation
 	 */
-	virtual BluetoothError setTraceOverwrite(bool isOverwrite) { return BLUETOOTH_ERROR_UNSUPPORTED; }
+	virtual BluetoothError setTraceOverwrite(bool /*isOverwrite*/) { return BLUETOOTH_ERROR_UNSUPPORTED; }
 
 	/**
 	 * @brief Set the log path of stack or snoop.
@@ -1258,7 +1266,7 @@ public:
 	 * @param interval Interval of keep alive
 	 * @return Possible error of the operation
 	 */
-	virtual BluetoothError setKeepAliveInterval(int interval) { return BLUETOOTH_ERROR_UNSUPPORTED; }
+	virtual BluetoothError setKeepAliveInterval(int /*interval*/) { return BLUETOOTH_ERROR_UNSUPPORTED; }
 
 	/**
 	 * @brief Retrieve a instance of a profile class. The profile is identified by

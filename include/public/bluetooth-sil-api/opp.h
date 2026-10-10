@@ -62,9 +62,9 @@ public:
 	 * @param fileName fileName of the push file
 	 * @param fileSize fileSize of the push file
 	*/
-	virtual void transferConfirmationRequested(BluetoothOppTransferId transferId, const std::string &adapterAddress, const std::string &address,
-	                                         const std::string &deviceName, const std::string &fileName,
-	                                         uint64_t fileSize) { }
+	virtual void transferConfirmationRequested(BluetoothOppTransferId /*transferId*/, const std::string &/*adapterAddress*/, const std::string &/*address*/,
+	                                         const std::string &/*deviceName*/, const std::string &/*fileName*/,
+	                                         uint64_t /*fileSize*/) { }
 
 	/**
 	 * @brief This method is called by stack when it receives a file from remote device to
@@ -74,7 +74,7 @@ public:
 	 * @param transferred Number of bytes received file
 	 * @param finished Indicates wether the receiving bytes is still running or finished
 	*/
-	virtual void transferStateChanged(BluetoothOppTransferId transferId, uint64_t transferred, bool finished) { }
+	virtual void transferStateChanged(BluetoothOppTransferId /*transferId*/, uint64_t /*transferred*/, bool /*finished*/) { }
 };
 
 /**
