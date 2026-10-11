@@ -1212,6 +1212,48 @@ public:
 			callback(BLUETOOTH_ERROR_UNSUPPORTED, "");
 	}
 
+	/**
+	 * @brief Issues command to play the browsed item, and reports how the remote
+	 * device answered it.
+	 *
+	 * The remote device answers a play request over AVRCP, possibly seconds later:
+	 * playItem(itemPath) can only say whether the request went out. A SIL that
+	 * waits for the answer without blocking implements this one.
+	 *
+	 * @param itemPath Object path of the audio/video item to play
+	 * @param callback Called once: with the remote device's result, or with the
+	 *                 error that kept the request from being sent.
+	 *                 Possible errors: as for playItem(itemPath).
+	 *
+	 * The default calls playItem(itemPath) and passes its result on.
+	 */
+	virtual void playItem(const std::string &itemPath, BluetoothResultCallback callback)
+	{
+		BluetoothError error = playItem(itemPath);
+		if (callback)
+			callback(error);
+	}
+
+	/**
+	 * @brief Changes the current folder for browsing, and reports how the remote
+	 * device answered it.
+	 *
+	 * @param itemPath Object path of the folder item to change to
+	 * @param callback Called once: with the remote device's result, or with the
+	 *                 error that kept the request from being sent.
+	 *                 Possible errors: as for changePath(itemPath).
+	 *
+	 * The default calls changePath(itemPath) and passes its result on.
+	 */
+	virtual void changePath(const std::string &itemPath, BluetoothResultCallback callback)
+	{
+		BluetoothError error = changePath(itemPath);
+		if (callback)
+			callback(error);
+	}
+
+	// New virtuals go last: the slots of the ones above stay where SILs and the service built before expect them.
+
 protected:
 	/**
 	 * @brief Retrieve the AVRCP status observer
