@@ -71,7 +71,7 @@ public:
 	 *
 	 * @return error code.
 	 */
-	virtual BluetoothError setPriorityHigh(const std::string &address, bool high) { return BLUETOOTH_ERROR_UNSUPPORTED; }
+	virtual BluetoothError setPriorityHigh(const std::string &/*address*/, bool /*high*/) { return BLUETOOTH_ERROR_UNSUPPORTED; }
 
 	/**
 	 * @brief Send data to a remote device.
@@ -82,7 +82,7 @@ public:
 	 *
 	 * @return error code.
 	 */
-	virtual BluetoothError sendData(const std::string &address, uint8_t *data, size_t size) { return BLUETOOTH_ERROR_UNSUPPORTED; }
+	virtual BluetoothError sendData(const std::string &/*address*/, uint8_t */*data*/, size_t /*size*/) { return BLUETOOTH_ERROR_UNSUPPORTED; }
 
 	/**
 	 * @brief Get report from a remote device
@@ -93,7 +93,7 @@ public:
 	 * @param size Length of report to get.
 	 * @param callback Callback function which is called when the operation is done or has failed.
 	 */
-	virtual void getReport(const std::string &address, HidReportType type, uint8_t reportId, size_t size, BluetoothHidGetCallback callback)
+	virtual void getReport(const std::string &/*address*/, HidReportType /*type*/, uint8_t /*reportId*/, size_t /*size*/, BluetoothHidGetCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED, 0, 0);
 	}
@@ -107,7 +107,7 @@ public:
 	 * @param size Length of report.
 	 * @param callback Callback function which is called when the operation is done or has failed.
 	 */
-	virtual void setReport(const std::string &address, HidReportType type, const uint8_t *report, size_t size, BluetoothResultCallback callback)
+	virtual void setReport(const std::string &/*address*/, HidReportType /*type*/, const uint8_t */*report*/, size_t /*size*/, BluetoothResultCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED);
 	}
@@ -148,7 +148,12 @@ protected:
 	}
 
 private:
-	BluetoothHidStatusObserver *observer;
+	BluetoothHidStatusObserver *observer{};
+
+protected:
+	// Not deleted through this interface (that would need a virtual destructor, which changes the layout
+	// SILs and the service share): protected, so that such a delete does not compile.
+	~BluetoothHidProfile() = default;
 };
 
 #endif

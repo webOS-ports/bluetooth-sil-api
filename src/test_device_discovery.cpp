@@ -85,7 +85,7 @@ static void set_property_cb(BluetoothError error)
 	g_assert_true(BLUETOOTH_ERROR_NONE == error);
 }
 
-static gboolean check_device_discovered(gpointer user_data)
+static gboolean check_device_discovered(gpointer /*user_data*/)
 {
 	DEBUG_MSG("Inside check_device_discovered # " << ++check_device_discovered_count);
 	g_assert_nonnull(observer);
@@ -139,7 +139,7 @@ static gboolean check_discovery_state_change(gpointer user_data)
 	}
 }
 
-static gboolean check_discovery_timeout(gpointer user_data)
+static gboolean check_discovery_timeout(gpointer /*user_data*/)
 {
 	// this is the overall timeout that should only fire if (e.g.) check_discovery_state_change never succeeds
 	g_assert_not_reached();
@@ -149,7 +149,7 @@ static gboolean check_discovery_timeout(gpointer user_data)
 	return FALSE;
 }
 
-static gboolean check_power_on_timeout(gpointer user_data)
+static gboolean check_power_on_timeout(gpointer /*user_data*/)
 {
 	clear_source(&gCheckSource);
 
@@ -168,7 +168,7 @@ static gboolean check_power_on_timeout(gpointer user_data)
 	return FALSE;
 }
 
-static gboolean setup_test_start_discovery(gpointer user_data)
+static gboolean setup_test_start_discovery(gpointer /*user_data*/)
 {
 	DEBUG_MSG("");
 	clear_source(&gIdleSource);
@@ -192,7 +192,7 @@ static void test_start_discovery(void)
 	delete observer;
 }
 
-static gboolean setup_test_cancel_discovery(gpointer user_data)
+static gboolean setup_test_cancel_discovery(gpointer /*user_data*/)
 {
 	DEBUG_MSG("");
 	clear_source(&gIdleSource);
@@ -221,7 +221,7 @@ static void test_cancel_discovery(void)
 	delete observer;
 }
 
-static gboolean setup_test_get_device_properties(gpointer user_data)
+static gboolean setup_test_get_device_properties(gpointer /*user_data*/)
 {
 	DEBUG_MSG("");
 	clear_source(&gIdleSource);

@@ -32,10 +32,12 @@ public:
 	{
 	}
 
-	void serviceFound(const std::string &address, const BluetoothGattService &service) { serviceFoundCalled = true; }
-	void serviceLost(const std::string &address, const BluetoothGattService &service) { serviceLostCalled = true; }
-	void characteristicFound(const std::string &address, const BluetoothGattCharacteristic &service) { characteristicFoundCalled = true; }
-	void characteristicValueChanged(const BluetoothGattCharacteristic &characteristic) { characteristicValueChangedCalled = true; }
+	using BluetoothGattProfileStatusObserver::characteristicValueChanged;
+
+	void serviceFound(const std::string &/*address*/, const BluetoothGattService &/*service*/) override { serviceFoundCalled = true; }
+	void serviceLost(const std::string &/*address*/, const BluetoothGattService &/*service*/) override { serviceLostCalled = true; }
+	void characteristicFound(const std::string &/*address*/, const BluetoothGattCharacteristic &/*service*/) { characteristicFoundCalled = true; }
+	void characteristicValueChanged(const BluetoothGattCharacteristic &/*characteristic*/) { characteristicValueChangedCalled = true; }
 
 	void reset()
 	{
@@ -64,39 +66,47 @@ public:
 	}
 	~TestGattProfile() { }
 
-	void getProperties(const std::string &address, BluetoothPropertiesResultCallback  callback) { }
-	void getProperty(const std::string &address, BluetoothProperty::Type type,
-	                         BluetoothPropertyResultCallback callback) { }
-	void connect(const std::string &address, BluetoothResultCallback callback) { }
-	void disconnect(const std::string &address, BluetoothResultCallback callback) { }
+	// The overloads not implemented here stay visible.
+	using BluetoothGattProfile::addService;
+	using BluetoothGattProfile::removeService;
+	using BluetoothGattProfile::readCharacteristics;
+	using BluetoothGattProfile::writeCharacteristic;
+	using BluetoothGattProfile::readDescriptors;
+	using BluetoothGattProfile::writeDescriptor;
 
-	void discoverServices(BluetoothResultCallback callback) { getGattObserver()->serviceFound("", BluetoothGattService());}
-	void discoverServices(const std::string &address, BluetoothResultCallback callback) { }
+	void getProperties(const std::string &/*address*/, BluetoothPropertiesResultCallback  /*callback*/) { }
+	void getProperty(const std::string &/*address*/, BluetoothProperty::Type /*type*/,
+	                         BluetoothPropertyResultCallback /*callback*/) { }
+	void connect(const std::string &/*address*/, BluetoothResultCallback /*callback*/) { }
+	void disconnect(const std::string &/*address*/, BluetoothResultCallback /*callback*/) { }
+
+	void discoverServices(BluetoothResultCallback /*callback*/) { getGattObserver()->serviceFound("", BluetoothGattService());}
+	void discoverServices(const std::string &/*address*/, BluetoothResultCallback /*callback*/) { }
 	// Obsolete
-	void addService(const BluetoothGattService &service, BluetoothResultCallback callback) { }
+	void addService(const BluetoothGattService &/*service*/, BluetoothResultCallback /*callback*/) { }
 	// Obsolete
-	void removeService(const BluetoothUuid &uuid, BluetoothResultCallback callback) { }
-	void changeCharacteristicWatchStatus(const std::string &address, const BluetoothUuid &service, const BluetoothUuid &characteristic, bool enabled, BluetoothResultCallback callback) { }
-	void readCharacteristics(const std::string &address, const BluetoothUuid &service, const BluetoothUuidList &characteristics, BluetoothGattReadCharacteristicsCallback callback) { }
-	void writeCharacteristic(const std::string &address, const BluetoothUuid &service, const BluetoothGattCharacteristic &characteristic, BluetoothResultCallback callback) { }
+	void removeService(const BluetoothUuid &/*uuid*/, BluetoothResultCallback /*callback*/) { }
+	void changeCharacteristicWatchStatus(const std::string &/*address*/, const BluetoothUuid &/*service*/, const BluetoothUuid &/*characteristic*/, bool /*enabled*/, BluetoothResultCallback /*callback*/) { }
+	void readCharacteristics(const std::string &/*address*/, const BluetoothUuid &/*service*/, const BluetoothUuidList &/*characteristics*/, BluetoothGattReadCharacteristicsCallback /*callback*/) { }
+	void writeCharacteristic(const std::string &/*address*/, const BluetoothUuid &/*service*/, const BluetoothGattCharacteristic &/*characteristic*/, BluetoothResultCallback /*callback*/) { }
 
 	// Obsolete
-	void readCharacteristics(const BluetoothUuid &service, const BluetoothUuidList &characteristics, BluetoothGattReadCharacteristicsCallback callback) { }
+	void readCharacteristics(const BluetoothUuid &/*service*/, const BluetoothUuidList &/*characteristics*/, BluetoothGattReadCharacteristicsCallback /*callback*/) { }
 	// Obsolete
-	void writeCharacteristic(const BluetoothUuid &service, const BluetoothGattCharacteristic &characteristic, BluetoothResultCallback callback) { }
-	BluetoothGattService getService(const std::string &address, const BluetoothUuid &uuid) { return BluetoothGattService(); }
-	BluetoothGattServiceList getServices(const std::string &address) { return BluetoothGattServiceList(); }
+	void writeCharacteristic(const BluetoothUuid &/*service*/, const BluetoothGattCharacteristic &/*characteristic*/, BluetoothResultCallback /*callback*/) { }
+	BluetoothGattService getService(const std::string &/*address*/, const BluetoothUuid &/*uuid*/) { return BluetoothGattService(); }
+	BluetoothGattServiceList getServices(const std::string &/*address*/) { return BluetoothGattServiceList(); }
 
 	// Obsolete
-	void readDescriptors(const BluetoothUuid& service, const BluetoothUuid &characteristic, const BluetoothUuidList &descriptors,
-	                            BluetoothGattReadDescriptorsCallback callback) { }
-	void readDescriptors(const std::string &address, const BluetoothUuid& service, const BluetoothUuid &characteristic, const BluetoothUuidList &descriptors,
-	                            BluetoothGattReadDescriptorsCallback callback) { }
+	void readDescriptors(const BluetoothUuid& /*service*/, const BluetoothUuid &/*characteristic*/, const BluetoothUuidList &/*descriptors*/,
+	                            BluetoothGattReadDescriptorsCallback /*callback*/) { }
+	void readDescriptors(const std::string &/*address*/, const BluetoothUuid& /*service*/, const BluetoothUuid &/*characteristic*/, const BluetoothUuidList &/*descriptors*/,
+	                            BluetoothGattReadDescriptorsCallback /*callback*/) { }
 	// Obsolete
-	void writeDescriptor(const BluetoothUuid &service, const BluetoothUuid &characteristic,
-	                             const BluetoothGattDescriptor &descriptor, BluetoothResultCallback callback) { }
-	void writeDescriptor(const std::string &address, const BluetoothUuid &service, const BluetoothUuid &characteristic,
-	                             const BluetoothGattDescriptor &descriptor, BluetoothResultCallback callback) { }
+	void writeDescriptor(const BluetoothUuid &/*service*/, const BluetoothUuid &/*characteristic*/,
+	                             const BluetoothGattDescriptor &/*descriptor*/, BluetoothResultCallback /*callback*/) { }
+	void writeDescriptor(const std::string &/*address*/, const BluetoothUuid &/*service*/, const BluetoothUuid &/*characteristic*/,
+	                             const BluetoothGattDescriptor &/*descriptor*/, BluetoothResultCallback /*callback*/) { }
 };
 
 static void test_gatt_observer(void)
@@ -107,16 +117,16 @@ static void test_gatt_observer(void)
 
 	// If the profile wouldn't use a null object for the GATT observer internally this
 	// call would crash everything with a SEGV
-	testProfile2.discoverServices([](BluetoothError error) { });
+	testProfile2.discoverServices([](BluetoothError /*error*/) { });
 
-	testProfile1.discoverServices([](BluetoothError error) { });
+	testProfile1.discoverServices([](BluetoothError /*error*/) { });
 	g_assert(observer.serviceFoundCalled);
 
 	observer.reset();
 
 	testProfile1.BluetoothGattProfile::registerObserver(&observer);
 
-	testProfile1.discoverServices([](BluetoothError error) { });
+	testProfile1.discoverServices([](BluetoothError /*error*/) { });
 	g_assert(observer.serviceFoundCalled);
 
 	observer.reset();

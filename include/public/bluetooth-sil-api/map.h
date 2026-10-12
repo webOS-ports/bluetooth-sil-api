@@ -266,6 +266,8 @@ public:
 	{
 	}
 
+	BluetoothMapProperty &operator=(const BluetoothMapProperty &other) = default;
+
 	/**
 	 * @brief Initialize the property with a type and a value
 	 * @param type Type of the property
@@ -288,19 +290,38 @@ public:
 
 	/**
 	 * @brief Get the value of the property
+	 *
+	 *        Throws std::logic_error when the property holds no value or one of another type. Most callers run
+	 *        inside GLib or LS2 callbacks, where an exception ends the process: there, use tryGetValue.
 	 * @return Value of the property
 	 */
 	template<class T>
 	T getValue() const
 	{
-		std::string requestedType = typeid(T).name();
+		T value{};
 
-		if (requestedType != typeName)
+		if (!tryGetValue(value))
 		{
 			throw std::logic_error("Non-matching types");
 		}
 
-		return dynamic_cast<PropertyImpl<T>*>(impl.get())->getValue();
+		return value;
+	}
+
+	/**
+	 * @brief Get the value of the property if it holds one of type T
+	 * @param value Set to the value; left alone otherwise
+	 * @return true if the property holds a value of type T
+	 */
+	template<class T>
+	bool tryGetValue(T &value) const
+	{
+		// typeName is set together with impl, so a matching name means impl holds a PropertyImpl<T>.
+		if (!impl || typeName != typeid(T).name())
+			return false;
+
+		value = static_cast<const PropertyImpl<T>*>(impl.get())->getValue();
+		return true;
 	}
 
 	/**
@@ -359,7 +380,12 @@ public:
 	 * @param sessionId Unique identifier of a session which was returned from map/connect.
 	 * @param properties List of event properties which have changed.
 	 */
-	virtual void messageNotificationEvent(const std::string &adapterAddress, const std::string &sessionId, BluetoothMessageList &properties) { }
+	virtual void messageNotificationEvent(const std::string &/*adapterAddress*/, const std::string &/*sessionId*/, BluetoothMessageList &/*properties*/) { }
+
+protected:
+	// Not deleted through this interface (that would need a virtual destructor, which changes the layout
+	// SILs and the service share): protected, so that such a delete does not compile.
+	~BluetoothMapStatusObserver() = default;
 };
 
 /**
@@ -504,7 +530,7 @@ protected:
 	 */
 	BluetoothMapStatusObserver *getMapObserver()
 	{
-		static BluetoothMapStatusObserver nullObserver;
+		static struct : BluetoothMapStatusObserver {} nullObserver;	// the interface's destructor is protected
 
 		if (!observer)
 			return &nullObserver;

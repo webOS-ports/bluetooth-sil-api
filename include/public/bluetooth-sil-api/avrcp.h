@@ -158,9 +158,9 @@ public:
 	 */
 	BluetoothPlayerInfo() :
 	playerType(BluetoothAvrcpPlayerType::PLAYER_TYPE_AUDIO),
+	addressed(false),
 	browsable(false),
-	searchable(false),
-	addressed(false) {}
+	searchable(false){}
 
 	/**
 	 * @brief Copy constructor
@@ -172,7 +172,9 @@ public:
 	addressed(other.getAddressed()),
 	browsable(other.getBrowsable()),
 	searchable(other.getSearchable()),
-	playListPath(other.getPlayListPath()) {}
+	playListPath(other.getPlayListPath()){}
+
+	BluetoothPlayerInfo &operator=(const BluetoothPlayerInfo &other) = default;
 
 	/* Get functions for the member functions */
 	/**
@@ -307,6 +309,8 @@ public:
 	{
 	}
 
+	BluetoothMediaMetaData &operator=(const BluetoothMediaMetaData &other) = default;
+
 	/**
 	 * @brief Retrieve the title of the media meta data
 	 * @return Title of the media meta data
@@ -424,6 +428,8 @@ public:
 	playable(other.getPlayable()),
 	metadata(other.getMetadata())
 	{}
+
+	BluetoothFolderItem &operator=(const BluetoothFolderItem &other) = default;
 	/* Get functions for the member variables */
 	/**
 	 * @brief Retrieve the item name
@@ -536,6 +542,8 @@ public:
 	{
 	}
 
+	BluetoothMediaPlayStatus &operator=(const BluetoothMediaPlayStatus &other) = default;
+
 	/**
 	 * @brief Retrieve the duration of the media play status
 	 * @return Duration of the media play status
@@ -645,6 +653,8 @@ public:
 	{
 	}
 
+	BluetoothPlayerApplicationSettingsProperty &operator=(const BluetoothPlayerApplicationSettingsProperty &other) = default;
+
 	/**
 	 * @brief Initialize the property with a type and a value
 	 * @param type Type of the property
@@ -667,19 +677,38 @@ public:
 
 	/**
 	 * @brief Get the value of the property
+	 *
+	 *        Throws std::logic_error when the property holds no value or one of another type. Most callers run
+	 *        inside GLib or LS2 callbacks, where an exception ends the process: there, use tryGetValue.
 	 * @return Value of the property
 	 */
 	template<class T>
 	T getValue() const
 	{
-		std::string requestedType = typeid(T).name();
+		T value{};
 
-		if (requestedType != typeName)
+		if (!tryGetValue(value))
 		{
 			throw std::logic_error("Non-matching types");
 		}
 
-		return dynamic_cast<PropertyImpl<T>*>(impl.get())->getValue();
+		return value;
+	}
+
+	/**
+	 * @brief Get the value of the property if it holds one of type T
+	 * @param value Set to the value; left alone otherwise
+	 * @return true if the property holds a value of type T
+	 */
+	template<class T>
+	bool tryGetValue(T &value) const
+	{
+		// typeName is set together with impl, so a matching name means impl holds a PropertyImpl<T>.
+		if (!impl || typeName != typeid(T).name())
+			return false;
+
+		value = static_cast<const PropertyImpl<T>*>(impl.get())->getValue();
+		return true;
 	}
 
 	/**
@@ -784,7 +813,7 @@ public:
 	 * @param requestId Id of the media meta data request
 	 * @param address Address of remote device
 	 */
-	virtual void mediaMetaDataRequested(BluetoothAvrcpRequestId requestId, const std::string &address) {}
+	virtual void mediaMetaDataRequested(BluetoothAvrcpRequestId /*requestId*/, const std::string &/*address*/) {}
 
 	/**
 	 * @brief This method is called when a remote device requests for media meta data.
@@ -793,9 +822,9 @@ public:
 	 * @param adapterAddress Adapater address of the local device
 	 * @param address Address of remote device
 	 */
-	virtual void mediaMetaDataRequested(BluetoothAvrcpRequestId requestId,
-										const std::string &adapterAddress,
-										const std::string &address) {}
+	virtual void mediaMetaDataRequested(BluetoothAvrcpRequestId /*requestId*/,
+										const std::string &/*adapterAddress*/,
+										const std::string &/*address*/) {}
 
 	/**
 	 * @brief This method is called when a remote device requests for media play status.
@@ -803,7 +832,7 @@ public:
 	 * @param requestId Id of the media play status request
 	 * @param address Address of remote device
 	 */
-	virtual void mediaPlayStatusRequested(BluetoothAvrcpRequestId requestId, const std::string &address) {}
+	virtual void mediaPlayStatusRequested(BluetoothAvrcpRequestId /*requestId*/, const std::string &/*address*/) {}
 
 	/**
 	 * @brief This method is called when a remote device requests for media play status.
@@ -812,9 +841,9 @@ public:
 	 * @param adapterAddress Adapater address of the local device
 	 * @param address Address of remote device
 	 */
-	virtual void mediaPlayStatusRequested(BluetoothAvrcpRequestId requestId,
-										  const std::string &adapterAddress,
-										  const std::string &address) {}
+	virtual void mediaPlayStatusRequested(BluetoothAvrcpRequestId /*requestId*/,
+										  const std::string &/*adapterAddress*/,
+										  const std::string &/*address*/) {}
 
 	/**
 	 * @brief This method is called when a local device(CT) receives media meta data from a remote device(TG).
@@ -822,7 +851,7 @@ public:
 	 * @param metaData Meta data of the media
 	 * @param address Address of remote device
 	 */
-	virtual void mediaDataReceived(const BluetoothMediaMetaData &metaData, const std::string &address) {}
+	virtual void mediaDataReceived(const BluetoothMediaMetaData &/*metaData*/, const std::string &/*address*/) {}
 
 	/**
 	 * @brief This method is called when a local device(CT) receives media meta data from a remote device(TG).
@@ -831,8 +860,8 @@ public:
 	 * @param adapterAddress Adapater address of the local device
 	 * @param address Address of remote device
 	 */
-	virtual void mediaDataReceived(const BluetoothMediaMetaData &metaData, const std::string &adapterAddress,
-		const std::string &address) {}
+	virtual void mediaDataReceived(const BluetoothMediaMetaData &/*metaData*/, const std::string &/*adapterAddress*/,
+		const std::string &/*address*/) {}
 
 	/**
 	 * @brief This method is called when a local device(CT) receives media play status from a remote device(TG).
@@ -840,7 +869,7 @@ public:
 	 * @param playStatus Play status of the media
 	 * @param address Address of remote device
 	 */
-	virtual void mediaPlayStatusReceived(const BluetoothMediaPlayStatus &playStatus, const std::string &address) {}
+	virtual void mediaPlayStatusReceived(const BluetoothMediaPlayStatus &/*playStatus*/, const std::string &/*address*/) {}
 
 	/**
 	 * @brief This method is called when a local device(CT) receives media play status from a remote device(TG).
@@ -849,8 +878,8 @@ public:
 	 * @param adapterAddress Adapater address of the local device
 	 * @param address Address of remote device
 	 */
-	virtual void mediaPlayStatusReceived(const BluetoothMediaPlayStatus &playStatus, const std::string &adapterAddress,
-		const std::string &address) {}
+	virtual void mediaPlayStatusReceived(const BluetoothMediaPlayStatus &/*playStatus*/, const std::string &/*adapterAddress*/,
+		const std::string &/*address*/) {}
 
 	/**
 	 * @brief This method is called when the volume has been changed locally on the TG, or what the actual volume
@@ -859,7 +888,7 @@ public:
 	 * @param volume The changed volume level, range 0 ~ 127.
 	 * @param address Address of remote device
 	 */
-	virtual void volumeChanged(int volume, const std::string &adapterAddress ,const std::string &address) {}
+	virtual void volumeChanged(int /*volume*/, const std::string &/*adapterAddress*/ ,const std::string &/*address*/) {}
 
 	/**
 	 * @brief This method is called when a local device receives PASS THROUGH command from a remote device.
@@ -869,8 +898,8 @@ public:
 	 * @param adapterAddress address of adapter
 	 * @param address Address of remote device
 	 */
-	virtual void passThroughCommandReceived(BluetoothAvrcpPassThroughKeyCode keyCode, BluetoothAvrcpPassThroughKeyStatus keyStatus,
-											const std::string &adapterAddress, const std::string &address) {}
+	virtual void passThroughCommandReceived(BluetoothAvrcpPassThroughKeyCode /*keyCode*/, BluetoothAvrcpPassThroughKeyStatus /*keyStatus*/,
+											const std::string &/*adapterAddress*/, const std::string &/*address*/) {}
 
 	/**
 	 * @brief This method is called when a local device is connected with a remote device and receives remote features
@@ -879,7 +908,7 @@ public:
 	 * @param features The remote feautures
 	 * @param address Address of remote device
 	 */
-	virtual void remoteFeaturesReceived(BluetoothAvrcpRemoteFeatures features, const std::string &address) {}
+	virtual void remoteFeaturesReceived(BluetoothAvrcpRemoteFeatures /*features*/, const std::string &/*address*/) {}
 
 	/**
 	 * @brief This method is called when a local device is connected with a remote device and receives remote features
@@ -889,7 +918,7 @@ public:
 	 * @param address Address of remote device
 	 * @param role Role of remote device. Should be one of "CT" or "TG".(CT = Controller, TG = Target)
 	 */
-	virtual void remoteFeaturesReceived(BluetoothAvrcpRemoteFeatures features, const std::string &address, const std::string &role) {}
+	virtual void remoteFeaturesReceived(BluetoothAvrcpRemoteFeatures /*features*/, const std::string &/*address*/, const std::string &/*role*/) {}
 
 	/**
 	 * @brief This method is called when a local device is connected with a remote device and receives remote features
@@ -900,7 +929,7 @@ public:
 	 * @param role Role of remote device. Should be one of "CT" or "TG".(CT = Controller, TG = Target)
 	 */
 
-	virtual void remoteFeaturesReceived(BluetoothAvrcpRemoteFeatures features, const std::string &adapterAddress, const std::string &address, const std::string &role) {}
+	virtual void remoteFeaturesReceived(BluetoothAvrcpRemoteFeatures /*features*/, const std::string &/*adapterAddress*/, const std::string &/*address*/, const std::string &/*role*/) {}
 	/**
 	 * @brief This method is called when a local device is connected with a remote device and receives supported notification events
 	 *        from a remote device.
@@ -908,7 +937,7 @@ public:
 	 * @param events List of supported notification events.
 	 * @param address Address of remote device
 	 */
-	virtual void supportedNotificationEventsReceived(const BluetoothAvrcpSupportedNotificationEventList &events, const std::string &address) {}
+	virtual void supportedNotificationEventsReceived(const BluetoothAvrcpSupportedNotificationEventList &/*events*/, const std::string &/*address*/) {}
 
 	/**
 	 * @brief This method is called when a local device is connected with a remote device and receives supported notification events
@@ -918,8 +947,8 @@ public:
 	 * @param adapterAddress Address of adapter
 	 * @param address Address of remote device
 	 */
-	virtual void supportedNotificationEventsReceived(const BluetoothAvrcpSupportedNotificationEventList &events,
-			const std::string &adapterAddress, const std::string &address) {}
+	virtual void supportedNotificationEventsReceived(const BluetoothAvrcpSupportedNotificationEventList &/*events*/,
+			const std::string &/*adapterAddress*/, const std::string &/*address*/) {}
 
 	/**
 	 * @brief This method is called when the local device (CT) receives the player application settings from remote device (TG)
@@ -928,8 +957,8 @@ public:
 	 * @param adapterAddress Adapater address of the local device
 	 * @param address Address of remote device
 	 */
-	virtual void playerApplicationSettingsReceived(const BluetoothPlayerApplicationSettingsPropertiesList &properties,
-		const std::string &adapterAddress, const std::string &address) {};
+	virtual void playerApplicationSettingsReceived(const BluetoothPlayerApplicationSettingsPropertiesList &/*properties*/,
+		const std::string &/*adapterAddress*/, const std::string &/*address*/) {};
 
 	/**
 	 * @brief This method is called when local device (CT) receives the player list from remote device (TG)
@@ -938,7 +967,7 @@ public:
 	 * @param adapterAddress Adapater address of the local device
 	 * @param address Address of remote device
 	 */
-	virtual void playerInfoReceived(const BluetothPlayerInfoList &playerInfoList, const std::string &adapterAddress, const std::string &address) {};
+	virtual void playerInfoReceived(const BluetothPlayerInfoList &/*playerInfoList*/, const std::string &/*adapterAddress*/, const std::string &/*address*/) {};
 
 	/**
 	 * @brief This method is called whenever browsing folder changes.
@@ -947,8 +976,13 @@ public:
 	 * @param adapterAddress Adapater address of the local device
 	 * @param address Address of remote device
 	 */
-	virtual void currentFolderReceived(const std::string currentFolder,
-									   const std::string &adapterAddress, const std::string &address){};
+	virtual void currentFolderReceived(const std::string /*currentFolder*/,
+									   const std::string &/*adapterAddress*/, const std::string &/*address*/){};
+
+protected:
+	// Not deleted through this interface (that would need a virtual destructor, which changes the layout
+	// SILs and the service share): protected, so that such a delete does not compile.
+	~BluetoothAvrcpStatusObserver() = default;
 };
 
 /**
@@ -1014,7 +1048,7 @@ public:
 	 * @param keyStatus Key status of PASS THROUGH command
 	 */
 
-	virtual BluetoothError sendPassThroughCommand(const std::string &address, BluetoothAvrcpPassThroughKeyCode keyCode, BluetoothAvrcpPassThroughKeyStatus keyStatus) { return BLUETOOTH_ERROR_UNSUPPORTED; }
+	virtual BluetoothError sendPassThroughCommand(const std::string &/*address*/, BluetoothAvrcpPassThroughKeyCode /*keyCode*/, BluetoothAvrcpPassThroughKeyStatus /*keyStatus*/) { return BLUETOOTH_ERROR_UNSUPPORTED; }
 
 	/**
 	 * @brief Perform a request to the SIL to retrieve all properties of the Bluetooth
@@ -1044,7 +1078,7 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void getPlayerApplicationSettingsProperty(BluetoothPlayerApplicationSettingsProperty::Type type,
+	virtual void getPlayerApplicationSettingsProperty(BluetoothPlayerApplicationSettingsProperty::Type /*type*/,
 													BluetoothPlayerApplicationSettingsPropertyResultCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED, BluetoothPlayerApplicationSettingsProperty(BluetoothPlayerApplicationSettingsProperty::Type::EMPTY));
@@ -1061,7 +1095,7 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void setPlayerApplicationSettingsProperty(const BluetoothPlayerApplicationSettingsProperty &property,
+	virtual void setPlayerApplicationSettingsProperty(const BluetoothPlayerApplicationSettingsProperty &/*property*/,
 													BluetoothResultCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED);
@@ -1078,7 +1112,7 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void setPlayerApplicationSettingsProperties(const BluetoothPlayerApplicationSettingsPropertiesList &properties,
+	virtual void setPlayerApplicationSettingsProperties(const BluetoothPlayerApplicationSettingsPropertiesList &/*properties*/,
 													BluetoothResultCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED);
@@ -1090,7 +1124,7 @@ public:
 	 * @param address Address of remote device
 	 * @param volume The requested volume level in percentage, range 0 ~ 127.
 	 */
-	virtual BluetoothError setAbsoluteVolume(const std::string &address, int volume) { return BLUETOOTH_ERROR_UNSUPPORTED; }
+	virtual BluetoothError setAbsoluteVolume(const std::string &/*address*/, int /*volume*/) { return BLUETOOTH_ERROR_UNSUPPORTED; }
 
 	/**
 	 * Browsing APIs
@@ -1120,7 +1154,7 @@ public:
 	 *                 success or to inform the error when operation is failed. The list items sent in
 	 *                 the callback will be freed once the callback returns.
 	 */
-	virtual void getFolderItems(uint32_t startIndex, uint32_t endIndex,
+	virtual void getFolderItems(uint32_t /*startIndex*/, uint32_t /*endIndex*/,
 								BluetoothAvrcpBrowseFolderItemsCallback callback)
 	{
 		BluetoothFolderItemList folderItems;
@@ -1137,7 +1171,7 @@ public:
 	 *                          BLUETOOTH_ERROR_NONE,
 	 *                          BLUETOOTH_ERROR_NOT_ALLOWED
 	 */
-	virtual BluetoothError playItem(const std::string &itemPath) { return BLUETOOTH_ERROR_UNSUPPORTED; }
+	virtual BluetoothError playItem(const std::string &/*itemPath*/) { return BLUETOOTH_ERROR_UNSUPPORTED; }
 
 	/**
 	 * @brief Changes the current folder for browsing. This API can be called
@@ -1151,7 +1185,7 @@ public:
 	 *                          BLUETOOTH_ERROR_NONE,
 	 *                          BLUETOOTH_ERROR_NOT_ALLOWED
 	 */
-	virtual BluetoothError changePath(const std::string &itemPath) { return BLUETOOTH_ERROR_UNSUPPORTED; }
+	virtual BluetoothError changePath(const std::string &/*itemPath*/) { return BLUETOOTH_ERROR_UNSUPPORTED; }
 	/**
 	 * @brief Adds the playable item to the now playing list.
 	 *
@@ -1163,7 +1197,7 @@ public:
 	 *                          BLUETOOTH_ERROR_NONE,
 	 *                          BLUETOOTH_ERROR_NOT_ALLOWED
 	 */
-	virtual BluetoothError addToNowPlaying(const std::string &itemPath) { return BLUETOOTH_ERROR_UNSUPPORTED; }
+	virtual BluetoothError addToNowPlaying(const std::string &/*itemPath*/) { return BLUETOOTH_ERROR_UNSUPPORTED; }
 	/**
 	 * @brief Searches the searchString in the current folder and its subfolders
 	 *
@@ -1171,12 +1205,54 @@ public:
 	 * @param callback Callback function which is called to return the path to the search list on success
 	 *                 or to return error in case of failure.
 	 */
-	virtual void search(const std::string &searchString,
+	virtual void search(const std::string &/*searchString*/,
 						BluetoothAvrcpBrowseSearchListCallback callback)
 	{
 		if (callback)
 			callback(BLUETOOTH_ERROR_UNSUPPORTED, "");
 	}
+
+	/**
+	 * @brief Issues command to play the browsed item, and reports how the remote
+	 * device answered it.
+	 *
+	 * The remote device answers a play request over AVRCP, possibly seconds later:
+	 * playItem(itemPath) can only say whether the request went out. A SIL that
+	 * waits for the answer without blocking implements this one.
+	 *
+	 * @param itemPath Object path of the audio/video item to play
+	 * @param callback Called once: with the remote device's result, or with the
+	 *                 error that kept the request from being sent.
+	 *                 Possible errors: as for playItem(itemPath).
+	 *
+	 * The default calls playItem(itemPath) and passes its result on.
+	 */
+	virtual void playItem(const std::string &itemPath, BluetoothResultCallback callback)
+	{
+		BluetoothError error = playItem(itemPath);
+		if (callback)
+			callback(error);
+	}
+
+	/**
+	 * @brief Changes the current folder for browsing, and reports how the remote
+	 * device answered it.
+	 *
+	 * @param itemPath Object path of the folder item to change to
+	 * @param callback Called once: with the remote device's result, or with the
+	 *                 error that kept the request from being sent.
+	 *                 Possible errors: as for changePath(itemPath).
+	 *
+	 * The default calls changePath(itemPath) and passes its result on.
+	 */
+	virtual void changePath(const std::string &itemPath, BluetoothResultCallback callback)
+	{
+		BluetoothError error = changePath(itemPath);
+		if (callback)
+			callback(error);
+	}
+
+	// New virtuals go last: the slots of the ones above stay where SILs and the service built before expect them.
 
 protected:
 	/**
@@ -1190,7 +1266,7 @@ protected:
 	 */
 	BluetoothAvrcpStatusObserver* getAvrcpObserver()
 	{
-		static BluetoothAvrcpStatusObserver nullObserver;
+		static struct : BluetoothAvrcpStatusObserver {} nullObserver;	// the interface's destructor is protected
 
 		if (!observer)
 			return &nullObserver;

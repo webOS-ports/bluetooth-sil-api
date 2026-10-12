@@ -27,7 +27,7 @@ static TestAdapterObserver *observer;
 static guint gSource = 0;
 static guint gIdleSource = 0;
 
-static gboolean check_property_change(gpointer user_data)
+static gboolean check_property_change(gpointer /*user_data*/)
 {
 	g_assert_nonnull(observer);
 	g_assert_true(observer->adapterPropertiesChangedFlag);
@@ -56,13 +56,6 @@ static void verify_discoverable_property_cb(BluetoothError error,
 {
 	g_assert_equal(error, BLUETOOTH_ERROR_NONE);
 	g_assert_equal(prop.getValue<bool>(), set_discoverable);
-}
-
-static void verify_discoverable_timeout_property_cb(BluetoothError error,
-        const BluetoothProperty &prop)
-{
-	g_assert_true(BLUETOOTH_ERROR_NONE == error);
-	g_assert_equal(prop.getValue<uint32_t>(), set_discoverable_timeout);
 }
 
 void get_properties_cb(BluetoothError error,
@@ -137,7 +130,7 @@ static void set_property_cb(BluetoothError error)
 
 /* Test functions */
 // Test for get_adapter_property
-static gboolean setup_test_get_adapter_property(gpointer user_data)
+static gboolean setup_test_get_adapter_property(gpointer /*user_data*/)
 {
 	clear_source(&gIdleSource);
 	g_assert_nonnull(defaultAdapter);
@@ -154,7 +147,7 @@ static void test_get_adapter_property(void)
 }
 
 // Test for get_adapter_properties
-static gboolean setup_test_get_adapter_properties(gpointer user_data)
+static gboolean setup_test_get_adapter_properties(gpointer /*user_data*/)
 {
 	clear_source(&gIdleSource);
 	g_assert_nonnull(defaultAdapter);
@@ -175,7 +168,7 @@ static void test_get_adapter_properties(void)
 }
 
 // Test for get_adapter_uuids
-static gboolean setup_test_get_adapter_uuids(gpointer user_data)
+static gboolean setup_test_get_adapter_uuids(gpointer /*user_data*/)
 {
 	DEBUG_MSG("");
 	clear_source(&gIdleSource);
@@ -197,7 +190,7 @@ static void test_get_adapter_uuids(void)
 }
 
 // Test for set_adapter_property
-static gboolean setup_test_set_adapter_property(gpointer user_data)
+static gboolean setup_test_set_adapter_property(gpointer /*user_data*/)
 {
 	DEBUG_MSG("");
 	clear_source(&gIdleSource);
@@ -241,7 +234,7 @@ static void test_set_adapter_property(void)
 }
 
 // Test for set_adapter_properties
-static gboolean setup_test_set_adapter_properties(gpointer user_data)
+static gboolean setup_test_set_adapter_properties(gpointer /*user_data*/)
 {
 	DEBUG_MSG("");
 	clear_source(&gIdleSource);

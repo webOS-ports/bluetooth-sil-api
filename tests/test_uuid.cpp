@@ -16,6 +16,7 @@
 
 #include <glib.h>
 
+#include <cstring>
 #include <iostream>
 #include <typeinfo>
 #include <unordered_map>
@@ -118,6 +119,42 @@ static void test_uuid_hash(void)
 	g_assert(map.find(BluetoothUuid("abc3fff0-c71f-11e4-8731-1681e6b88ec1")) != map.end());
 }
 
+static void test_uuid_hex_only(void)
+{
+	// Letters that are not hex digits were accepted, for every length.
+	g_assert(!BluetoothUuid("zzzz").isValid());
+	g_assert(!BluetoothUuid("1234567g").isValid());
+	g_assert(!BluetoothUuid("gggggggg-gggg-gggg-gggg-gggggggggggg").isValid());
+	g_assert(BluetoothUuid("ABCD").isValid());
+}
+
+static void test_uuid_case(void)
+{
+	// BlueZ reports lower case; an app may send upper case.
+	BluetoothUuid lower("0000110a-0000-1000-8000-00805f9b34fb");
+	BluetoothUuid upper("0000110A-0000-1000-8000-00805F9B34FB");
+	g_assert(lower == upper);
+	g_assert(!(lower != upper));
+	g_assert(lower == "0000110A-0000-1000-8000-00805F9B34FB");
+	g_assert(!(lower < upper) && !(upper < lower));
+	g_assert(upper.toString() == "0000110A-0000-1000-8000-00805F9B34FB");	// kept as given
+
+	std::unordered_map<BluetoothUuid, int> map;
+	map.insert({ lower, 1 });
+	g_assert(map.find(upper) != map.end());
+}
+
+static void test_uuid_short_to_128(void)
+{
+	// 0x180d in the base UUID: 0000180d-0000-1000-8000-00805f9b34fb.
+	const uint8_t expected[16] = { 0x00, 0x00, 0x18, 0x0d, 0x00, 0x00, 0x10, 0x00,
+	                               0x80, 0x00, 0x00, 0x80, 0x5f, 0x9b, 0x34, 0xfb };
+	uint128_t fromShort = BluetoothUuid("180d").toUInt128();
+	uint128_t fromLong = BluetoothUuid("0000180d-0000-1000-8000-00805f9b34fb").toUInt128();
+	g_assert(memcmp(fromShort.data, expected, 16) == 0);
+	g_assert(memcmp(fromLong.data, expected, 16) == 0);
+}
+
 int main(int argc, char **argv)
 {
 	g_test_init(&argc, &argv, nullptr);
@@ -126,6 +163,9 @@ int main(int argc, char **argv)
 	g_test_add_func("/uuid/conversion-to-value", test_uuid_conversion_to_value);
 	g_test_add_func("/uuid/comparision", test_uuid_comparison);
 	g_test_add_func("/uuid/hash", test_uuid_hash);
+	g_test_add_func("/uuid/hex-only", test_uuid_hex_only);
+	g_test_add_func("/uuid/case", test_uuid_case);
+	g_test_add_func("/uuid/short-to-128", test_uuid_short_to_128);
 
 	return g_test_run();
 }

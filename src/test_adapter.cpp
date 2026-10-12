@@ -23,7 +23,7 @@ using namespace std;
 static guint gIdleSource = 0;
 static vector<BluetoothAdapter *> adapters;
 
-static gboolean setup_test_get_adapters(gpointer user_data)
+static gboolean setup_test_get_adapters(gpointer /*user_data*/)
 {
 	clear_source(&gIdleSource);
 	adapters = sil->getAdapters();

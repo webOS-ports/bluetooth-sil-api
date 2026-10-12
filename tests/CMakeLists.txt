@@ -16,3 +16,5 @@
 
 webos_add_test(test_uuid SOURCES test_uuid.cpp LIBRARIES ${GLIB2_LDFLAGS})
 webos_add_test(test_gatt SOURCES test_gatt.cpp LIBRARIES ${GLIB2_LDFLAGS})
+webos_add_test(test_properties SOURCES test_properties.cpp LIBRARIES ${GLIB2_LDFLAGS})
+webos_add_test(test_avrcp SOURCES test_avrcp.cpp LIBRARIES ${GLIB2_LDFLAGS})

@@ -125,12 +125,11 @@ public:
 		discoveryStateValue(false),
 		pairingDeviceAddress(""),
 		pairingConfirmationPin(""),
-		pairingSecretType(BLUETOOTH_PAIRING_SECRET_TYPE_PASSKEY),
 		pairingConfirmationPasskey(0),
 		pairingConfirmationRequested(false),
 		pairingDisplaySecretRequested(false),
-		pairingSecretRequested(false)
-	{
+		pairingSecretRequested(false),
+		pairingSecretType(BLUETOOTH_PAIRING_SECRET_TYPE_PASSKEY){
 	}
 
 	~TestAdapterObserver()

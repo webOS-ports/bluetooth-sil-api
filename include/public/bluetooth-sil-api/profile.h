@@ -35,7 +35,7 @@ public:
 	 * @param address Device address of the device properties has changed for
 	 * @param properties List of properties which have changed.
 	 */
-	virtual void propertiesChanged(const std::string &address, BluetoothPropertiesList properties) { }
+	virtual void propertiesChanged(const std::string &/*address*/, BluetoothPropertiesList /*properties*/) { }
 	/**
 	 * @brief This method is called when a property of the profile regarding a specific
 	 *        device has changed.
@@ -43,7 +43,12 @@ public:
 	 * @param address Device address of the device properties has changed for
 	 * @param properties List of properties which have changed.
 	 */
-	virtual void propertiesChanged(const std::string &adapterAddress, const std::string &address, BluetoothPropertiesList properties) { }
+	virtual void propertiesChanged(const std::string &/*adapterAddress*/, const std::string &/*address*/, BluetoothPropertiesList /*properties*/) { }
+
+protected:
+	// Not deleted through this interface (that would need a virtual destructor, which changes the layout
+	// SILs and the service share): protected, so that such a delete does not compile.
+	~BluetoothProfileStatusObserver() = default;
 };
 
 /**
@@ -135,7 +140,7 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void enable(const std::string &uuid, BluetoothResultCallback callback)
+	virtual void enable(const std::string &/*uuid*/, BluetoothResultCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED);
 	}
@@ -152,7 +157,7 @@ public:
 	 * @param callback Callback function which is called when the operation is done or
 	 *        has failed.
 	 */
-	virtual void disable(const std::string &uuid, BluetoothResultCallback callback)
+	virtual void disable(const std::string &/*uuid*/, BluetoothResultCallback callback)
 	{
 		if (callback) callback(BLUETOOTH_ERROR_UNSUPPORTED);
 	}
@@ -169,7 +174,7 @@ protected:
 	 */
 	BluetoothProfileStatusObserver* getObserver()
 	{
-		static BluetoothProfileStatusObserver nullObserver;
+		static struct : BluetoothProfileStatusObserver {} nullObserver;	// the interface's destructor is protected
 
 		if (!observer)
 			return &nullObserver;

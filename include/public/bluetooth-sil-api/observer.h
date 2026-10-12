@@ -47,7 +47,7 @@ public:
 	 *        is fully powered and ready for connection attempts or device discovery.
 	 *        If false the adapter is powered down an no actions are possible.
 	 */
-	virtual void adapterStateChanged(bool powered) { }
+	virtual void adapterStateChanged(bool /*powered*/) { }
 
 	/**
 	 * @brief The method is called when the HCI timeout of adapter occurs.
@@ -60,7 +60,7 @@ public:
 	 *
 	 * @param properties List of properties which have changed.
 	 */
-	virtual void adapterPropertiesChanged(BluetoothPropertiesList properties) { }
+	virtual void adapterPropertiesChanged(BluetoothPropertiesList /*properties*/) { }
 
 	/**
 	 * @brief The method is called when the state of the keep alive changes.
@@ -68,21 +68,21 @@ public:
 	 * @param enabled Indicates the state of the keep alive. True means the keep alive
 	 *        is running. If false the keep alive is not running.
 	 */
-	virtual void adapterKeepAliveStateChanged(bool enabled) { }
+	virtual void adapterKeepAliveStateChanged(bool /*enabled*/) { }
 
 	/**
 	 * @brief The method is called when a new device is discovered.
 	 *
 	 * @param properties Properties of the new device.
 	 */
-	virtual void deviceFound(BluetoothPropertiesList properties) { }
+	virtual void deviceFound(BluetoothPropertiesList /*properties*/) { }
 
 	/**
 	 * @brief The method is called when a new device is discovered.
 	 *
 	 * @param properties Properties of the new device.
 	 */
-	virtual void deviceFound(const std::string &address, BluetoothPropertiesList properties) { }
+	virtual void deviceFound(const std::string &/*address*/, BluetoothPropertiesList /*properties*/) { }
 
 	/**
 	 * @brief The method is called when a device has disappeared and is no longer
@@ -90,7 +90,7 @@ public:
 	 *
 	 * @param address Address of the removed device.
 	 */
-	virtual void deviceRemoved(const std::string &address) { }
+	virtual void deviceRemoved(const std::string &/*address*/) { }
 
 	/**
 	 * @brief The method is called when a new LE device is discovered
@@ -98,7 +98,7 @@ public:
 	 *
 	 * @param properties Properties of the new device.
 	 */
-	virtual void leDeviceFound(const std::string &address, BluetoothPropertiesList properties) { }
+	virtual void leDeviceFound(const std::string &/*address*/, BluetoothPropertiesList /*properties*/) { }
 
 	/**
 	 * @brief The method is called when a device has disappeared and is no longer
@@ -108,7 +108,7 @@ public:
 	 * @param scanId Unique ID of LE scan
 	 * @param address Address of the removed device.
 	 */
-	virtual void leDeviceRemoved(const std::string &address) { }
+	virtual void leDeviceRemoved(const std::string &/*address*/) { }
 
 	/**
 	 * @brief The method is called when a new LE device is discovered by scan ID
@@ -116,7 +116,7 @@ public:
 	 * @param scanId Unique ID of LE scan
 	 * @param properties Properties of the new device.
 	 */
-	virtual void leDeviceFoundByScanId(uint32_t scanId, BluetoothPropertiesList properties) { }
+	virtual void leDeviceFoundByScanId(uint32_t /*scanId*/, BluetoothPropertiesList /*properties*/) { }
 
 	/**
 	 * @brief The method is called when a device has disappeared and is no longer
@@ -125,7 +125,7 @@ public:
 	 * @param scanId Unique ID of LE scan
 	 * @param address Address of the removed device.
 	 */
-	virtual void leDeviceRemovedByScanId(uint32_t scanId, const std::string &address) { }
+	virtual void leDeviceRemovedByScanId(uint32_t /*scanId*/, const std::string &/*address*/) { }
 
 	/**
 	 * @brief The method is called when the link key is created for a connected remote device.
@@ -133,7 +133,7 @@ public:
 	 * @param address Address of the device which the link key is created.
 	 * @param
 	 */
-	virtual void deviceLinkKeyCreated(const std::string &address, BluetoothLinkKey LinkKey) { }
+	virtual void deviceLinkKeyCreated(const std::string &/*address*/, BluetoothLinkKey /*LinkKey*/) { }
 
 	/**
 	 * @brief The method is called when the link key is destroyed for a connected remote device.
@@ -141,7 +141,7 @@ public:
 	 * @param address Address of the device which the link key is created.
 	 * @param
 	 */
-	virtual void deviceLinkKeyDestroyed(const std::string &address, BluetoothLinkKey LinkKey) { }
+	virtual void deviceLinkKeyDestroyed(const std::string &/*address*/, BluetoothLinkKey /*LinkKey*/) { }
 
 	/**
 	 * @brief The method is called when one or more properties have changed for a
@@ -149,8 +149,8 @@ public:
 	 * @param address Address of the device whose properties have changed.
 	 * @param properties List of changed properties.
 	 */
-	virtual void devicePropertiesChanged(const std::string &address,
-	                                     BluetoothPropertiesList properties) { }
+	virtual void devicePropertiesChanged(const std::string &/*address*/,
+	                                     BluetoothPropertiesList /*properties*/) { }
 
 	/**
 	 * @brief The method is called when one or more properties have changed for a
@@ -160,8 +160,8 @@ public:
 	 * @param address Address of the device whose properties have changed.
 	 * @param properties List of changed properties.
 	 */
-	virtual void leDevicePropertiesChanged(const std::string &address,
-	                                     BluetoothPropertiesList properties) { }
+	virtual void leDevicePropertiesChanged(const std::string &/*address*/,
+	                                     BluetoothPropertiesList /*properties*/) { }
 
 	/**
 	 * @brief The method is called when one or more properties have changed for a
@@ -171,8 +171,8 @@ public:
 	 * @param address Address of the device whose properties have changed.
 	 * @param properties List of changed properties.
 	 */
-	virtual void leDevicePropertiesChangedByScanId(uint32_t scanId, const std::string &address,
-	                                     BluetoothPropertiesList properties) { }
+	virtual void leDevicePropertiesChangedByScanId(uint32_t /*scanId*/, const std::string &/*address*/,
+	                                     BluetoothPropertiesList /*properties*/) { }
 
 	/**
 	 * @brief The method is called when the status of the device discovery process changes.
@@ -181,7 +181,7 @@ public:
 	 *
 	 * @param active Indicates whether the device discovery process is active or not.
 	 */
-	virtual void discoveryStateChanged(bool active) { }
+	virtual void discoveryStateChanged(bool /*active*/) { }
 
 	/**
 	 * @brief The method is called when the device has to display a pairing confirmation
@@ -195,7 +195,7 @@ public:
 	 * @param address Address of the device
 	 * @param passkey Passkey which the user has to confirm that it is the same on both devices.
 	 */
-	virtual void displayPairingConfirmation(const std::string &address, BluetoothPasskey passkey) { }
+	virtual void displayPairingConfirmation(const std::string &/*address*/, BluetoothPasskey /*passkey*/) { }
 
 	/**
 	 * @brief The method is called when the PIN for legacy pairing should be shown to the user.
@@ -203,7 +203,7 @@ public:
 	 * @param address Address of the device
 	 * @param secret PIN to display to the user.
 	 */
-	virtual void displayPairingSecret(const std::string &address, const std::string &pin) { }
+	virtual void displayPairingSecret(const std::string &/*address*/, const std::string &/*pin*/) { }
 
 	/**
 	 * @brief The method is called when the passkey should be shown to the user. The
@@ -215,7 +215,7 @@ public:
 	 * @param address Address of the device
 	 * @param secret Autogenerated passkey to display to the user.
 	 */
-	virtual void displayPairingSecret(const std::string &address, BluetoothPasskey passkey) { }
+	virtual void displayPairingSecret(const std::string &/*address*/, BluetoothPasskey /*passkey*/) { }
 
 	/**
 	 * @brief The method is called when the user has to supply a secret for authentication with
@@ -230,7 +230,7 @@ public:
 	 * @param address Address of the device
 	 * @param type Type of requested secret
 	 */
-	virtual void requestPairingSecret(const std::string &address, BluetoothPairingSecretType type) { }
+	virtual void requestPairingSecret(const std::string &/*address*/, BluetoothPairingSecretType /*type*/) { }
 
 	/**
 	 * @brief The method is called when an ongoing pairing request is canceled.
@@ -243,7 +243,7 @@ public:
 	 * @param address Address of the device.
 	 * @param state Value is true for connect request and false for disconnect.
 	 */
-	virtual void leConnectionRequest(const std::string &address, bool state) { }
+	virtual void leConnectionRequest(const std::string &/*address*/, bool /*state*/) { }
 };
 
 #endif

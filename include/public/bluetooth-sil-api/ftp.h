@@ -101,6 +101,8 @@ public:
 	{
 	}
 
+	BluetoothFtpElement &operator=(const BluetoothFtpElement &other) = default;
+
 	/**
 	 * @brief Check if a field is set.
 	 *

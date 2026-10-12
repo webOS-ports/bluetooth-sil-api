@@ -149,15 +149,15 @@ public:
 	 * @param address Address of the device
 	 * @param deviceName deviceName of the device
 	*/
-	virtual void accessRequested(BluetoothPbapAccessRequestId accessRequestId, const std::string &address,
-	        const std::string &deviceName) { }
+	virtual void accessRequested(BluetoothPbapAccessRequestId /*accessRequestId*/, const std::string &/*address*/,
+	        const std::string &/*deviceName*/) { }
 
 	/**
 	 * @brief The method is called when a PBAP specific property changes
 	 *
 	 * @param properties List of properties which have changed.
 	 */
-	virtual void profilePropertiesChanged(const std::string &adapterAddress, const std::string &address, BluetoothPbapApplicationParameters &properties) { }
+	virtual void profilePropertiesChanged(const std::string &/*adapterAddress*/, const std::string &/*address*/, BluetoothPbapApplicationParameters &/*properties*/) { }
 	/**
 	 * @brief The method is called when PhoneBook transfer status changes
 	 *
@@ -167,7 +167,12 @@ public:
 	 * @param objectPath unique key for each transfer
 	 * @param state state of current transfer
 	 */
-	virtual void transferStatusChanged(const std::string &adapterAddress, const std::string &address, const std::string &destinationPath, const std::string &objectPath, const std::string &state) { }
+	virtual void transferStatusChanged(const std::string &/*adapterAddress*/, const std::string &/*address*/, const std::string &/*destinationPath*/, const std::string &/*objectPath*/, const std::string &/*state*/) { }
+
+protected:
+	// Not deleted through this interface (that would need a virtual destructor, which changes the layout
+	// SILs and the service share): protected, so that such a delete does not compile.
+	~BluetoothPbapStatusObserver() = default;
 };
 
 /**
@@ -323,7 +328,7 @@ protected:
 	 */
 	BluetoothPbapStatusObserver *getPbapObserver()
 	{
-		static BluetoothPbapStatusObserver nullObserver;
+		static struct : BluetoothPbapStatusObserver {} nullObserver;	// the interface's destructor is protected
 
 		if (!observer)
 			return &nullObserver;
