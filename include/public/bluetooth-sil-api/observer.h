@@ -198,6 +198,19 @@ public:
 	virtual void displayPairingConfirmation(const std::string &/*address*/, BluetoothPasskey /*passkey*/) { }
 
 	/**
+	 * @brief The method is called when a device wants to pair without a passkey to
+	 *        compare ("Just Works"), and the user has to allow it. The answer goes to
+	 *        the supplyPairingConfirmation method of the BluetoothAdapter class, as for
+	 *        a passkey confirmation.
+	 *
+	 *        Only used with devices supporting Bluetooth version >= 2.1 and Simple Secure
+	 *        Pairing (SSP).
+	 *
+	 * @param address Address of the device
+	 */
+	virtual void requestPairingAuthorization(const std::string &/*address*/) { }
+
+	/**
 	 * @brief The method is called when the PIN for legacy pairing should be shown to the user.
 	 *
 	 * @param address Address of the device
