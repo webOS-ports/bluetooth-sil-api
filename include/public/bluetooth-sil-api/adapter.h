@@ -939,6 +939,39 @@ public:
 	virtual void cancelPairing(const std::string &address, BluetoothResultCallback callback) = 0;
 
 	/**
+	 * @brief Connect a remote device as a whole: every profile both ends
+	 *        support that is set to connect by itself, as the stack's own
+	 *        device connect does (BlueZ: org.bluez.Device1.Connect).
+	 *
+	 *        A profile's connect (BluetoothA2dpProfile and the like) connects
+	 *        one profile; this is the device, the way a user picks a headset
+	 *        from a list.
+	 *
+	 * @param address Address of the device to connect.
+	 * @param callback Callback function which is called when the operation is
+	 *        done or has failed. A SIL without it answers
+	 *        BLUETOOTH_ERROR_UNSUPPORTED.
+	 */
+	virtual void connectDevice(const std::string &/*address*/, BluetoothResultCallback callback)
+	{
+		callback(BLUETOOTH_ERROR_UNSUPPORTED);
+	}
+
+	/**
+	 * @brief Disconnect every connected profile of a remote device (BlueZ:
+	 *        org.bluez.Device1.Disconnect).
+	 *
+	 * @param address Address of the device to disconnect.
+	 * @param callback Callback function which is called when the operation is
+	 *        done or has failed. A SIL without it answers
+	 *        BLUETOOTH_ERROR_UNSUPPORTED.
+	 */
+	virtual void disconnectDevice(const std::string &/*address*/, BluetoothResultCallback callback)
+	{
+		callback(BLUETOOTH_ERROR_UNSUPPORTED);
+	}
+
+	/**
 	 * Test function to poke mock SIL to initiate IncomingPair
 	 * @param address Address of the device from which incoming pairing attempt should be initiated.
 	 * @param callback Callback function which is called when the operation is done or
